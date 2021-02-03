@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for post in posts.items %}
+        <article class="media content-section">
+            <img class="rounded-circle article-img" src="...">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <small class="text-muted">Posted by </small>
+                    <a class="mr-2" href="">{{ post.author.username }}</a>
+                    <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                </div>
+                <p class="article-content">{{ post.content }}</p>
+                <h6>{{ post.author }}</h6>
+            </div>
+        </article>
+    {% endfor %}
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if posts.page == page.num %}
+                <a class="btn btn-violet mb-4" href="">{{ page_num }}</a>
+            {% else %}
+            <a class="btn btn-outline-violet mb-4" href="">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+        {% endfor %}
+{% endblock content %}

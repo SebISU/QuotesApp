@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+    {% if title %}
+        <title>SageSAY: {{ title }}</title>
+    {% else %}
+        <title>SageSAY: the widest adages community</title>
+    {% endif %}
+
+  </head>
+  <body>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-violet fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_for('main.home') }}">SageSAY</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="navbar-nav mr-auto">
+                        <a class="nav-item nav-link" href="#">About</a>
+                    </div>
+                    <form class="mx-2 my-auto d-inline w-100"> <div class="input-group"> <input type="text" class="form-control" placeholder=""> <span class="input-group-append"> <button class="btn btn-outline-secondary" type="button">GO</button> </span> </div> </form>
+                    <!-- Right side -->
+                    <div class="navbar-nav">
+                        {% if current_user.is_authenticated %}
+                            <a class="nav-item nav-link" href="#">New Adage</a>
+                            <a class="nav-item nav-link" href="#">Account</a>
+                            <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                        {% else %}
+                            <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                            <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container mt-80">
+        <div class="row">
+            <div class="col-md-8">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock content %}
+            </div>
+            <div class="col-md-4">
+                <div class="content-section">
+                    <div class="mb-3 text-center">
+                        <h3>Best Adages</h3>
+                    </div>
+                    <ul class="list-group">
+                    <li class="list-group-item list-group-item-light">"Memento mori"</li>
+                    <li class="list-group-item list-group-item-light">"Today is a new day"</li>
+                    <li class="list-group-item list-group-item-light">"Carpe diem"</li>
+                    <li class="list-group-item list-group-item-light">"Nie dziel skóry na niedźwiedziu"</li>
+                    </ul>
+                    </p>
+                </div>
+                <div class="content-section">
+                    <div class="mb-3 text-center">
+                        <h3>Trending</h3>
+                    </div>
+                    <ul class="list-group">
+                    <li class="list-group-item list-group-item-light">"Ja nie dam rady?"</li>
+                    <li class="list-group-item list-group-item-light">"Today is a new day"</li>
+                    <li class="list-group-item list-group-item-light">"Carpe diem"</li>
+                    <li class="list-group-item list-group-item-light">"Nie dziel skóry na niedźwiedziu"</li>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="footer">
+        <h6 class="mx-auto">All rights reserved. &#169; 2021 by SageSAY Inc.</h6>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

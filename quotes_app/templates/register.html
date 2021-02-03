@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <div class="card mt-5">
+            <div class="card-header">
+                <h3>Join Us</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }} <!-- sets a csrf token (secret key) -->
+                    <div class="form-group">
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control form-control-lg", placeholder=form.username.label.text) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control form-control-lg", placeholder=form.email.label.text) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control form-control-lg", placeholder=form.password.label.text) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {% if form.confirm_password.errors %}
+                            {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.confirm_password(class="form-control form-control-lg", placeholder=form.confirm_password.label.text) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-check">
+                        {% if form.accept_terms.errors %}
+                            {{ form.accept_terms() }}
+                            {{ form.accept_terms.label() }}
+                            <a href="{{ url_for('users.login') }}"> terms of service</a>
+                            <div class="invalid-feedback invalid-feedback-fix">
+                                {% for error in form.accept_terms.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.accept_terms() }}
+                            {{ form.accept_terms.label() }}
+                            <a href="{{ url_for('main.terms') }}"> terms of service</a>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Sign Up" class="btn float-right login_btn">
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links">
+                    Already Have An Account?<a href="{{  url_for('users.login')  }}">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
