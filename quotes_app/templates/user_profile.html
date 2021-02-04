@@ -1,12 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="row py-5 px-4">
-    <div class="col-md-10 mx-auto">
+    <div class="col-md-8">
+    <div class="mx-auto">
         <!-- Profile widget -->
         <div class="bg-white shadow rounded overflow-hidden">
             <div class="px-4 pt-0 pb-4 cover">
                 <div class="media align-items-end profile-head">
-                    <div class="profile mr-3"><img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="..." width="130" class="rounded mb-2 img-thumbnail"><a href="#" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a></div>
+                    <div class="profile mr-3"><img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="..." width="130" class="rounded mb-2 img-thumbnail img-profile"><a href="#" class="btn btn-outline-violet btn-sm btn-block">Edit profile</a></div>
                     <div class="media-body mb-5 text-white">
                         <h4 class="mt-0 mb-0">{{ user.username }}</h4>
                         <p class="small mb-4"> <i class="fas fa-map-marker-alt mr-2"></i>Sydney</p>
@@ -19,10 +20,10 @@
                         <h5 class="font-weight-bold mb-0 d-block">{{ num_posts }}</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Posts</small>
                     </li>
                     <li class="list-inline-item">
-                        <h5 class="font-weight-bold mb-0 d-block">{{ num_likes }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Like</small>
+                        <h5 class="font-weight-bold mb-0 d-block">{{ num_likes }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Stars</small>
                     </li>
                     <li class="list-inline-item">
-                        <h5 class="font-weight-bold mb-0 d-block">{{ num_comments }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Comment</small>
+                        <h5 class="font-weight-bold mb-0 d-block">{{ num_comments }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Comments</small>
                     </li>
                 </ul>
             </div>
@@ -40,31 +41,51 @@
                 </div>
                 <!-- posts -->
                 <div class="container">
-                    <div class="card mt-5 border-5 pt-2 active pb-0 px-3">
-                        <div class="card-body ">
-                            <div class="row">
-                                <div class="col-12 ">
-                                    <h4 class="card-title "><b>Program Title</b></h4>
+                    {% for post in posts_data %}
+                        <div class="card bg-light mt-5 border-5 pt-2 active pb-0 px-3">
+                            <div class="card-body ">
+                                <div class="row">
+                                    <div class="col-12 ">
+                                        <h3 class="card-title "><b>"{{ post[-1].content }}"</b></h3>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end text-center">
+                                        <h6><i>{{ post[-1].author }}</i></h6>
+                                    </div>
+                                    <div class="col">
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            <p class="card-text text-muted small"> Posted by <span class="font-weight-bold"> {{ User.query.filter_by(id=post.user_id).first().username }}</span> on {{ post.date_posted.strftime('%-d %a, %Y') }}</p>
+                                        </h6>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <h6 class="card-subtitle mb-2 text-muted">
-                                        <p class="card-text text-muted small "> <img src="https://img.icons8.com/metro/26/000000/star.png" class="mr-1 " width="19" height="19" id="star"> <span class="vl mr-2 ml-0"></span> Created by <span class="font-weight-bold"> BBBootstrap Team</span> on 1 Nov , 2018</p>
-                                    </h6>
+                            </div>
+                            <div class="card-footer bg-white px-0 ">
+                                <div class="row">
+                                    <div class="col-md-auto ">
+                                        <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s">
+                                            <img src="{{ url_for('static', filename='comment.png') }}" class="mr-1 " width="19" height="19">
+                                            <small>COMMENT</small>
+                                        </a>
+                                        <span class="vl mr-2 ml-0"></span>
+                                        <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s">
+                                            <img src="{{ url_for('static', filename='christmas-star.png') }}" class="mr-1" width="19" height="19">
+                                            <small>STARS</small>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-auto ">
+                                        <ul class="list-inline">
+                                            {% for user in post[:-1] %}
+                                            <li class="list-inline-item">
+                                                <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s">
+                                                    <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="DP" class=" rounded-circle img-fluid " width="35" height="35">
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-white px-0 ">
-                            <div class="row">
-                                <div class=" col-md-auto "> <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s"><img src="https://img.icons8.com/ios/50/000000/settings.png" width="19" height="19"> <small>SETTINGS</small></a> <i class="mdi mdi-settings-outline"></i> <a href="#" class=" btn-outlined btn-black text-muted"><img src="https://img.icons8.com/metro/26/000000/link.png" width="17" height="17" id="plus"> <small>PROGRAM LINK</small> </a> <a href="#" class="btn btn-outlined btn-black text-muted "><img src="https://img.icons8.com/metro/26/000000/more.png" width="20" height="20" class="mr-2 more"><small>MORE</small></a> <span class="vl ml-3"></span> </div>
-                                <div class="col-md-auto ">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item"> <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1573035860/Pra/Hadie-profile-pic-circle-1.png" alt="DP" class=" rounded-circle img-fluid " width="35" height="35"> </li>
-                                        <li class="list-inline-item"> <img src="https://img.icons8.com/ios/50/000000/plus.png" width="30" height="30 " class="more"> </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                     <div class="card mt-5 border-5 pt-2 active pb-0 px-3">
                         <div class="card-body ">
                             <div class="row">
@@ -80,7 +101,23 @@
                         </div>
                         <div class="card-footer bg-white px-0 ">
                             <div class="row">
-                                <div class=" col-md-auto "> <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s"><img src="https://img.icons8.com/ios/50/000000/settings.png" width="19" height="19"> <small>SETTINGS</small></a> <i class="mdi mdi-settings-outline"></i> <a href="#" class=" btn-outlined btn-black text-muted"><img src="https://img.icons8.com/metro/26/000000/link.png" width="17" height="17" id="plus"> <small>PROGRAM LINK</small> </a> <a href="#" class="btn btn-outlined btn-black text-muted "><img src="https://img.icons8.com/metro/26/000000/more.png" width="20" height="20" class="mr-2 more"><small>MORE</small></a> <span class="vl ml-3"></span> </div>
+                                <div class=" col-md-auto ">
+                                    <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s">
+                                    <img src="https://img.icons8.com/ios/50/000000/settings.png" width="19" height="19">
+                                    <small>SETTINGS</small>
+                                    </a>
+                                    <i class="mdi mdi-settings-outline">
+                                    </i>
+                                    <a href="#" class=" btn-outlined btn-black text-muted">
+                                    <img src="https://img.icons8.com/metro/26/000000/link.png" width="17" height="17" id="plus">
+                                    <small>PROGRAM LINK</small>
+                                    </a>
+                                    <a href="#" class="btn btn-outlined btn-black text-muted ">
+                                        <img src="https://img.icons8.com/metro/26/000000/more.png" width="20" height="20" class="mr-2 more">
+                                    <small>MORE</small>
+                                    </a>
+                                    <span class="vl ml-3"></span>
+                                </div>
                                 <div class="col-md-auto ">
                                     <ul class="list-inline">
                                         <li class="list-inline-item"> <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1573035860/Pra/Hadie-profile-pic-circle-1.png" alt="DP" class=" rounded-circle img-fluid " width="35" height="35"> <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1573035909/Pra/Loren-profile-pic-circle.png" alt="DP" class=" rounded-circle img-fluid " width="35" height="35"> <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1573035929/Pra/59d280613165c000014cc031_circleniamhhogan.png" alt="DP" class=" rounded-circle img-fluid " width="35" height="35"> <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1573035929/Pra/59d280613165c000014cc031_circleniamhhogan.png" alt="DP" class=" rounded-circle img-fluid " width="35" height="35"> </li>
@@ -93,6 +130,34 @@
                 </div>
                 <!-- posts -->
             </div>
+        </div>
+    </div>
+    </div>
+    <!-- sidebar -->
+    <div class="col-md-4">
+        <div class="content-section">
+            <div class="mb-3 text-center">
+                <h3>Best List</h3>
+            </div>
+            <ul class="list-group">
+            <li class="list-group-item list-group-item-light">"Memento mori"</li>
+            <li class="list-group-item list-group-item-light">"Today is a new day"</li>
+            <li class="list-group-item list-group-item-light">"Carpe diem"</li>
+            <li class="list-group-item list-group-item-light">"Nie dziel skóry na niedźwiedziu"</li>
+            </ul>
+            </p>
+        </div>
+        <div class="content-section">
+            <div class="mb-3 text-center">
+                <h3>Starred recently</h3>
+            </div>
+            <ul class="list-group">
+            <li class="list-group-item list-group-item-light">"Ja nie dam rady?"</li>
+            <li class="list-group-item list-group-item-light">"Today is a new day"</li>
+            <li class="list-group-item list-group-item-light">"Carpe diem"</li>
+            <li class="list-group-item list-group-item-light">"Nie dziel skóry na niedźwiedziu"</li>
+            </ul>
+            </p>
         </div>
     </div>
 </div>

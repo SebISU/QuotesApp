@@ -1,7 +1,7 @@
 body {
     background: #f0fafa;
     color: #333333;
-    margin-top: 12rem;
+    margin-top: 6rem;
 }
 
 h1,
@@ -18,23 +18,17 @@ h6 {
 }
 
 .btn-outline-violet {
-    color: #f0fafa;
+    color: #451e3e;
     border-color: #451e3e;
 }
-
-.btn-outline-violet:hover {
-    color: #401e3e;
-    border-color: #401e3e;
+.btn-outline-violet:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .btn-violet {
     color: #451e3e;
     border-color: #451e3e;
-}
-
-.btn-violet:hover {
-    color: #401e3e;
-    border-color: #401e3e;
 }
 
 .btn-link-own {
@@ -214,34 +208,11 @@ margin-left: 4px;
     background-repeat: no-repeat
 }
 
-/*body {
-    background: #654ea3;
-    background: linear-gradient(to right, #e96443, #904e95); 
-    min-height: 100vh
-}*/
-
-
 /* for posts list */
 
-/*
-body {
-    font-family: 'Rubik', sans-serif;
-    height: 100% !important;
-    background-color: #3F51B5 !important
-}
-
-#star {
-    margin-left: -5px !important;
-    vertical-align: bottom !important;
-    opacity: 0.5
-}
 
 .more {
     opacity: 0.5 !important
-}
-
-.btn:hover {
-    color: black !important
 }
 
 .vl {
@@ -251,35 +222,12 @@ body {
     height: 25px
 }
 
-#plus {
-    opacity: 0.8
-}
-
-.card {
-    border-radius: 10px !important
-}
-
-a:hover {
-    background-color: #ccc !important
-}
-
 .btn-outlined:active {
     color: #FFF;
     border-color: #fff !important
 }
 
-img {
+.img-profile {
     cursor: pointer;
     overflow: visible
 }
-
-.btn:focus,
-.btn:active {
-    outline: none !important;
-    box-shadow: none !important
-}
-
-.container {
-    margin-top: 100px !important
-}
-*/
