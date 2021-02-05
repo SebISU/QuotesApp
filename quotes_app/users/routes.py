@@ -5,6 +5,7 @@ from quotes_app.models import User, Post, Like, Comment
 from quotes_app.users.forms import (RegistrationForm, LoginForm, ResetRequestForm,
                                 ResetPasswordForm)
 from quotes_app.users.utils import send_reset_token
+from quotes_app.main.utils import prepare_posts_display, update_like_table
 from datetime import datetime as dt
 
 
@@ -47,11 +48,14 @@ def logout():
     return redirect(url_for('main.home'))
 
 # check how finding recent stars works
-@users.route("/user/<string:username>")
+@users.route("/user/<string:username>", methods=['GET', 'POST'])
 @login_required
 def user_profile(username):
     page = request.args.get('page', 1, type=int)
+    post_id = request.args.get('star', type=int)
     user = User.query.filter_by(username=username).first_or_404()
+    if post_id:
+        update_like_table(current_user, post_id)
     posts = Post.query.filter_by(posted_by=user)\
         .order_by(Post.date_posted.desc())
     num_posts = posts.all()
@@ -59,16 +63,11 @@ def user_profile(username):
     num_likes = len(Like.query.filter_by(like_author=user).all())
     num_comments = len(Comment.query.filter_by(comment_author=user).all())
     posts = posts.paginate(page=page, per_page=5)
-    posts_data = []
-    for post in posts.items:
-        post_info = []
-        likes = Like.query.filter_by(like_post=post).limit(8).all()
-        for like in likes:
-            post_data.append(User.query.get(like.user_id))
-        post_info.append(post)
-        posts_data.append(post_info)
-    return render_template('user_profile.html', title=username, posts=posts, user=user,
-        num_posts=num_posts, num_likes=num_likes, num_comments=num_comments)
+    posts_data = prepare_posts_display(posts)
+    # func in utils that looks for the newest stars and the most popular posts (sidebar)
+    return render_template('user_profile.html', title=username, posts=posts,
+        posts_data=posts_data, user=user, num_posts=num_posts,
+        num_likes=num_likes, num_comments=num_comments)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])

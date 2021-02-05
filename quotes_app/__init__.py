@@ -1,3 +1,5 @@
+# self._TemplateReference__context.name to get the current template's name
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -26,8 +28,10 @@ def create_app(config_class=Config):
     # here import and init blueprints
     from quotes_app.main.routes import main
     from quotes_app.users.routes import users
+    from quotes_app.posts.routes import posts
 
     app.register_blueprint(main)
     app.register_blueprint(users)
+    app.register_blueprint(posts)
 
     return app

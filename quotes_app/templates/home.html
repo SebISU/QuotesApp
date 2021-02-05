@@ -1,31 +1,70 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="col-md-8">
-    {% for post in posts.items %}
-        <article class="media content-section">
-            <img class="rounded-circle article-img" src="...">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <small class="text-muted">Posted by </small>
-                    <a class="mr-2" href="">{{ post.author.username }}</a>
-                    <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+<!-- posts -->
+    <div class="container">
+        {% for post in posts_data %}
+            <div class="card bg-light mb-5 border-5 pt-2 active pb-0 px-3">
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-12 ">
+                            <h3 class="card-title "><b>"{{ post[-2].content }}"</b></h3>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end text-center">
+                            <h6><i>{{ post[-2].author }}</i></h6>
+                        </div>
+                        <div class="col">
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <p class="card-text text-muted small"> Posted by <a href="{{ url_for('users.user_profile', username=post[-2].posted_by.username) }}" class="font-weight-bold text-dark"> {{ post[-2].posted_by.username }}</a> on {{ post[-2].date_posted.strftime('%-d %a, %Y') }}</p>
+                            </h6>
+                        </div>
+                    </div>
                 </div>
-                <p class="article-content">{{ post.content }}</p>
-                <h6>{{ post.author }}</h6>
+                <div class="card-footer bg-white px-0 ">
+                    <div class="row">
+                        <div class="col-md-auto ">
+                            <a href="#" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s">
+                                <img src="{{ url_for('static', filename='comment.png') }}" class="mr-1 " width="19" height="19">
+                                <small>COMMENT</small>
+                            </a>
+                            <span class="vl mr-2 ml-0"></span>
+                            <a href="{{ url_for('main.home', page=posts.page, star=post[-2].id) }}" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s">
+                            {% if post[-1] == True %}
+                                <img src="{{ url_for('static', filename='christmas-star.png') }}" class="mr-1" width="19" height="19">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='star.png') }}" class="mr-1" width="19" height="19">
+                            {% endif %}
+                            </a>
+                            <small>STARS</small>
+                        </div>
+                        <div class="col-md-auto ">
+                            <ul class="list-inline">
+                                {% for user in post[:-2] %}
+                                <li class="list-inline-item">
+                                    <a href="{{ url_for('users.user_profile', username=user.username) }}" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="DP" class=" rounded-circle img-fluid " width="35" height="35">
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </article>
-    {% endfor %}
-    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% endfor %}
+        {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
         {% if page_num %}
-            {% if posts.page == page.num %}
-                <a class="btn btn-violet mb-4" href="">{{ page_num }}</a>
+            {% if posts.page == page_num %}
+            <a class="btn btn-violet mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
             {% else %}
-            <a class="btn btn-outline-violet mb-4" href="">{{ page_num }}</a>
+                <a class="btn btn-outline-violet mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
             {% endif %}
         {% else %}
             ...
         {% endif %}
         {% endfor %}
+    </div>
+<!-- posts -->
 </div>
 <div class="col-md-4">
     <div class="content-section">
