@@ -4,7 +4,8 @@ from quotes_app import db, bcrypt
 from quotes_app.models import User, Post, Like, Comment
 from quotes_app.users.forms import (RegistrationForm, LoginForm, ResetRequestForm,
                                 ResetPasswordForm)
-from quotes_app.users.utils import send_reset_token
+from quotes_app.users.utils import (send_reset_token, get_best_posts_user,
+                                get_recent_stars_user)
 from quotes_app.main.utils import prepare_posts_display, update_like_table
 from datetime import datetime as dt
 
@@ -64,10 +65,12 @@ def user_profile(username):
     num_comments = len(Comment.query.filter_by(comment_author=user).all())
     posts = posts.paginate(page=page, per_page=5)
     posts_data = prepare_posts_display(posts)
-    # func in utils that looks for the newest stars and the most popular posts (sidebar)
+    best_posts = get_best_posts_user(user, 5)
+    recent_stars = get_recent_stars_user(user, 5)
     return render_template('user_profile.html', title=username, posts=posts,
         posts_data=posts_data, user=user, num_posts=num_posts,
-        num_likes=num_likes, num_comments=num_comments)
+        num_likes=num_likes, num_comments=num_comments, best_posts=best_posts,
+        recent_stars=recent_stars)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])

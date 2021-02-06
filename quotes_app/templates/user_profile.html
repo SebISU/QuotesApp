@@ -13,9 +13,9 @@
                                 <a href="#" class="btn btn-outline-violet btn-sm btn-block">Edit profile</a>
                             {% endif %}
                             </div>
-                        <div class="media-body mb-5 text-white">
-                            <h4 class="mt-0 mb-0">{{ user.username }}</h4>
-                            <p class="small mb-4"> <i class="fas fa-map-marker-alt mr-2"></i>Sydney</p>
+                        <div class="media-body mb-5">
+                            <h4 class="mt-0 mb-0 text-white">{{ user.username }}</h4>
+                            <p class="small mb-4 text-white"> <i class="fas fa-map-marker-alt mr-2"></i>Sydney</p>
                         </div>
                     </div>
                 </div>
@@ -50,8 +50,8 @@
                             <div class="card bg-light mb-5 border-5 pt-2 active pb-0 px-3">
                                 <div class="card-body ">
                                     <div class="row">
-                                        <div class="col-12 ">
-                                            <h3 class="card-title "><b>"{{ post[-2].content }}"</b></h3>
+                                        <div class="col-12 link-post-content">
+                                            <a href="#"><h3 class="card-title "><b>"{{ post[-2].content }}"</b></h3></a>
                                         </div>
                                         <div class="col-12 d-flex justify-content-end text-center">
                                             <h6><i>{{ post[-2].author }}</i></h6>
@@ -77,14 +77,14 @@
                                                 {% else %}
                                                     <img src="{{ url_for('static', filename='star.png') }}" class="mr-1" width="19" height="19">
                                                 {% endif %}
-                                                <small>STARS</small>
                                             </a>
+                                            <small>STARS</small>
                                         </div>
                                         <div class="col-md-auto ">
                                             <ul class="list-inline">
                                                 {% for user in post[:-2] %}
                                                 <li class="list-inline-item">
-                                                    <a href="{{ url_for('users.user_profile', username=user.username) }}" class="btn btn-outlined btn-black text-muted bg-transparent" data-wow-delay="0.7s">
+                                                    <a href="{{ url_for('users.user_profile', username=user.username) }}">
                                                         <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="DP" class=" rounded-circle img-fluid " width="35" height="35">
                                                     </a>
                                                 </li>
@@ -119,25 +119,38 @@
                 <h3>Best List</h3>
             </div>
             <ul class="list-group">
-            <li class="list-group-item list-group-item-light">"Memento mori"</li>
-            <li class="list-group-item list-group-item-light">"Today is a new day"</li>
-            <li class="list-group-item list-group-item-light">"Carpe diem"</li>
-            <li class="list-group-item list-group-item-light">"Nie dziel skóry na niedźwiedziu"</li>
+                {% if not best_posts %}
+                    {% if current_user == user %}
+                        <a href="{{ url_for('posts.new_post') }}"><li class="list-group-item list-group-item-light">No Adages. Add one.</li></a>
+                    {% else %}
+                        <li class="list-group-item list-group-item-light">No Adages to show.</li>
+                    {% endif %}
+                        {% else %}
+                    {% for post in best_posts %}
+                        <a href="#"><li class="list-group-item list-group-item-light">"{{ post.content }}"</li></a>
+                    {% endfor %}
+                {% endif %}
             </ul>
             </p>
         </div>
         <div class="content-section">
             <div class="mb-3 text-center">
-                <h3>Starred recently</h3>
+                <h3>Starred Recently</h3>
             </div>
             <ul class="list-group">
-            <li class="list-group-item list-group-item-light">"Ja nie dam rady?"</li>
-            <li class="list-group-item list-group-item-light">"Today is a new day"</li>
-            <li class="list-group-item list-group-item-light">"Carpe diem"</li>
-            <li class="list-group-item list-group-item-light">"Nie dziel skóry na niedźwiedziu"</li>
+                {% if not recent_stars %}
+                    {% if current_user == user %}
+                        <a href="{{ url_for('main.home') }}"><li class="list-group-item list-group-item-light">No Adages. Give one a star.</li></a>
+                    {% else %}
+                        <li class="list-group-item list-group-item-light">No Adages to show.</li>
+                    {% endif %}
+                {% else %}
+                    {% for post in recent_stars %}
+                    <a href="#"><li class="list-group-item list-group-item-light">"{{ post.content }}"</li></a>
+                    {% endfor %}
+                {% endif %}
             </ul>
             </p>
         </div>
     </div>
-</div>
 {% endblock content %}

@@ -47,7 +47,7 @@ class Post(db.Model):
     likes = db.relationship('Like', backref='like_post', lazy=True)
 
     def __repr__(self):
-        return f"Post('{self.author}', '{self.date_posted}', '{self.content}'"
+        return f"Post('{self.author}', '{self.date_posted}', '{self.content}')"
 
 
 class Comment(db.Model):
@@ -58,7 +58,7 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
 
     def __repr__(self):
-        return f"Comment('{self.content}', '{self.date_comment}'"
+        return f"Comment('{self.content}', '{self.date_comment}')"
 
 
 class Like(db.Model):
@@ -68,4 +68,4 @@ class Like(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
 
     def __repr__(self):
-        return f"Like('{self.user_id}', '{self.post_id}', '{self.date_like}'"
+        return f"Like('{self.user_id}', '{self.post_id}', '{self.date_like}')"

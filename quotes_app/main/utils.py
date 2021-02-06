@@ -1,8 +1,8 @@
+from datetime import timedelta, datetime as dt
 from quotes_app import db
 from sqlalchemy import func
 from flask_login import current_user
-from quotes_app.models import User, Like
-
+from quotes_app.models import User, Like, Post
 
 
 def prepare_posts_display(posts):
@@ -26,16 +26,35 @@ def prepare_posts_display(posts):
         posts_data.append(post_info)
     return posts_data
 
-
-# do it later. First you have to add posts and give likes to check
-# if not enough likes take by comments later by date
+# by stars. If not enough,the oldest posts without stars are added
 def get_best_posts(size):
-    # to get count & group_by
-    # add order_by to queries to get the values with the best rate
-    posts = Like.query.with_entities(Like.like_post, func.count(Like.like_post))\
-        .group_by(Like.like_post).limit(size).all()
-    # if len(posts) < size:
-    return posts
+    posts = Like.query.with_entities(Like.post_id, func.count(Like.user_id))\
+        .group_by(Like.post_id).order_by(func.count(Like.user_id).desc()).limit(size).all()
+    prep_posts = []
+    for item in posts:
+        post = Post.query.get(item[0])
+        prep_posts.append(post)
+    if len(prep_posts) < size:
+        prep_posts = prep_posts + Post.query.filter(Post.id.\
+            notin_([item.id for item in prep_posts])).order_by(Post.date_posted).\
+            limit(size-len(prep_posts)).all()
+    return prep_posts
+
+# by stars  (last 7 days). If not enough, adages without stars posted in the last 7 days are added
+def get_trending(size):
+    time_window = dt.utcnow() - timedelta(days=7)
+    posts = Like.query.filter(Like.date_like >= time_window).with_entities(Like.post_id,
+        func.count(Like.user_id)).group_by(Like.post_id).order_by(func.count(Like.user_id)\
+        .desc()).limit(size).all()
+    prep_posts = []
+    for item in posts:
+        post = Post.query.get(item[0])
+        prep_posts.append(post)
+    if len(prep_posts) < size:
+        prep_posts = prep_posts + Post.query.filter(Post.date_posted >= time_window,
+            Post.id.notin_([item.id for item in prep_posts])).order_by(Post.date_posted).\
+            limit(size-len(prep_posts)).all()
+    return prep_posts
 
 
 def update_like_table(user, post_id):

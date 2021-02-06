@@ -51,6 +51,15 @@ h6 {
     text-decoration: underline;
 }
 
+.list-group a {
+    text-decoration: none;
+}
+
+.link-post-content a {
+    color: #444444;
+    text-decoration: none;
+}
+
 .site-header .navbar-nav .nav-link {
     color: #cbd5db;
 }
@@ -69,53 +78,6 @@ h6 {
     border: 1px solid  #A8A8A8;
     border-radius: 3px;
     margin-bottom: 20px;
-}
-
-.article-title {
-    color: #444444;
-}
-
-a.article-title:hover {
-    color: #428bca;
-    text-decoration: none;
-}
-
-.article-content {
-    white-space: pre-line;
-}
-
-.article-img {
-    height: 45px;
-    width: 45px;
-    margin-right: 16px;
-}
-
-.article-metadata {
-    padding-bottom: 1px;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #e3e3e3;
-}
-
-.article-metadata a:hover {
-    color: #333;
-    text-decoration: none;
-}
-
-.article-svg {
-    width: 25px;
-    height: 25px;
-    vertical-align: middle;
-}
-
-.account-img {
-    height: 125px;
-    width: 125px;
-    margin-right: 20px;
-    margin-bottom: 16px;
-}
-
-.account-heading {
-    font-size: 2.5rem;
 }
 
 .footer {
@@ -245,4 +207,8 @@ margin-left: 4px;
 .img-profile {
     cursor: pointer;
     overflow: visible
+}
+
+.list-inline-item:not(:last-child) {
+    margin-right: 0px;
 }

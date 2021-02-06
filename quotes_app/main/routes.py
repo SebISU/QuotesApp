@@ -1,7 +1,8 @@
 from flask import render_template, request, Blueprint
 from flask_login import current_user
 from quotes_app.models import Post, Like
-from quotes_app.main.utils import prepare_posts_display, get_best_posts, update_like_table
+from quotes_app.main.utils import (prepare_posts_display, get_best_posts,
+            get_trending, update_like_table)
 
 
 main = Blueprint('main', __name__)
@@ -17,7 +18,10 @@ def home():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     posts_data = prepare_posts_display(posts)
-    return render_template('home.html', posts=posts, posts_data=posts_data)
+    best_posts = get_best_posts(5)
+    trend_posts = get_trending(5)
+    return render_template('home.html', posts=posts, posts_data=posts_data,
+        best_posts=best_posts, trend_posts=trend_posts)
 
 
 @main.route("/about")
