@@ -147,25 +147,25 @@ margin-left: 4px;
 }
 
 .form-control {
-    border-color: #451e3e;
+    border-color: white;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
 
 .form-control:focus{
-    border-color: #451e3e;
+    border-color: white;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
 
 .form-control.is-invalid{
-    border-color: #451e3e;
+    border-color: white;
     background-image: none;
 }
 
 
 .form-control.is-invalid:focus{
-    border-color: #451e3e;
+    border-color: white;
     background-image: none;
 }
 
@@ -211,4 +211,30 @@ margin-left: 4px;
 
 .list-inline-item:not(:last-child) {
     margin-right: 0px;
+}
+
+/* button add a file */
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.btn-add-file {
+    border: 2px solid #451e3e;
+    color: #451e3e;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
 }

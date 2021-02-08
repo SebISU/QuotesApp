@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="col-md-8 mx-auto">
+<div class="col-lg-8 mx-auto">
     <!-- Profile widget -->
     <div class="bg-white shadow rounded overflow-hidden">
         <div class="px-4 pt-0 pb-4 cover">
@@ -35,7 +35,7 @@
                         <form method="POST" action="" enctype="multipart/form-data"> <!-- enctype added in order to pass an image data properly -->
                             {{ form.hidden_tag() }} <!-- sets a csrf token (secret key) -->
                             <fieldset class="form-group">
-                                <div class="p-4 rounded shadow-sm bg-light">
+                                <div class="p-4 rounded shadow bg-light">
                                     <div class="form-group">
                                         {{ form.username.label(class="form-control-label") }}
                     
@@ -63,47 +63,85 @@
                                         {% else %}
                                             {{ form.email(class="form-control form-lg") }}
                                         {% endif %}
+                                    </div>
+                                </div>
+                                <h4 class="pt-5 mb-2">Update Profile Picture</h4>
+                                <div class="p-1 pb-0 rounded shadow bg-light">
+                                    <div class="pt-3 form-group">
+                                        <div class="form-group d-flex justify-content-center upload-btn-wrapper">
+                                            <button class="btn btn-add-file">Upload Photo</button>
+                                            {{ form.profile_pic(class="form-control-file") }}
+                                            {% if form.profile_pic.errors %}
+                                                {% for error in form.profile_pic.errors %}
+                                                <span class="text-danger">{{ error }}</span></br>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div> 
+                                <h4 class="pt-5 mb-2">New Background Image</h4>
+                                <div class="p-1 pb-0 rounded shadow bg-light">
+                                    <div class="pt-3 form-group">
+                                        <div class="form-group d-flex justify-content-center upload-btn-wrapper">
+                                            <button class="btn btn-add-file">Upload Photo</button>
+                                            {{ form.background_pic(class="form-control-file") }}
+                                            {% if form.background_pic.errors %}
+                                                {% for error in form.background_pic.errors %}
+                                                <span class="text-danger">{{ error }}</span></br>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                                 <h4 class="pt-5 mb-2">Details</h4>
-                                <div class="p-4 rounded shadow-sm bg-light">
+                                <div class="p-4 rounded shadow bg-light">
                                     <div class="form-group">
-                                        {{ form.username.label(class="form-control-label") }}
+                                        {{ form.full_name.label(class="form-control-label") }}
                     
-                                        {% if form.username.errors %}
-                                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                                        {% if form.full_name.errors %}
+                                            {{ form.full_name(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form.username.errors %}
+                                                {% for error in form.full_name.errors %}
                                                     <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                         {% else %}
-                                            {{ form.username(class="form-control form-lg") }}
+                                            {{ form.full_name(class="form-control form-lg") }}
                                         {% endif %}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.email.label(class="form-control-label") }}
+                                        {{ form.city.label(class="form-control-label") }}
                     
-                                        {% if form.email.errors %}
-                                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                        {% if form.city.errors %}
+                                            {{ form.city(class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
-                                                {% for error in form.email.errors %}
+                                                {% for error in form.city.errors %}
                                                     <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                         {% else %}
-                                            {{ form.email(class="form-control form-lg") }}
+                                            {{ form.city(class="form-control form-lg") }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.about.label(class="form-control-label") }}
+                    
+                                        {% if form.about.errors %}
+                                            {{ form.about(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.about.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.about(class="form-control form-lg") }}
                                         {% endif %}
                                     </div>
                                     <div class="d-flex form-group mb-0 mt-4 mr-4 justify-content-end">
-                                        {{ form.submit(class="btn btn-outline-info") }}
+                                        {{ form.submit(class="btn btn-violet") }}
                                     </div>
-                                </div>
+                                </div>  
                             </fieldset>
-                        </form>
-                        <form class="dropzone" action="https://stackoverflow.com/questions/19006939/why-is-my-dropzone-javascript-form-not-working" method="post" enctype="multipart/form-data">
-                            {{ form.hidden_tag() }}
-                            <input type="file" name="file" />
                         </form>
                     </div>
                 </div>
@@ -113,3 +151,10 @@
     </div>
 </div>
 {% endblock content %}
+
+<div class="input-group"> 
+    <div class="custom-file">
+      <input type="file" class="custom-file-input" id="upload">
+      <label class="custom-file-label" for="upload"><i class="ion-android-cloud-outline"></i>Choose file</label>
+    </div>
+  </div>

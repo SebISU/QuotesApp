@@ -2,7 +2,7 @@ from flask import url_for
 from sqlalchemy import func
 from quotes_app import mail
 from flask_mail import Message
-from quotes_app.models import Like, Post
+from quotes_app.models import Like, Post, Comment
 
 
 def send_reset_token(user):
@@ -40,3 +40,13 @@ def get_recent_stars_user(user, size):
     for like in likes:
         posts.append(Post.query.get(like.post_id))
     return posts
+
+
+def get_posts_num_plc(user):
+    posts = Post.query.filter_by(posted_by=user)\
+    .order_by(Post.date_posted.desc())
+    num_posts = posts.all()
+    num_posts = len(num_posts)
+    num_likes = len(Like.query.filter_by(like_author=user).all())
+    num_comments = len(Comment.query.filter_by(comment_author=user).all())
+    return posts, num_posts, num_likes, num_comments

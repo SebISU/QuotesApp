@@ -3,9 +3,9 @@ from flask_login import login_user, logout_user, current_user, login_required
 from quotes_app import db, bcrypt
 from quotes_app.models import User, Post, Like, Comment
 from quotes_app.users.forms import (RegistrationForm, LoginForm, ResetRequestForm,
-                                ResetPasswordForm)
+                                ResetPasswordForm, UpdateProfileForm)
 from quotes_app.users.utils import (send_reset_token, get_best_posts_user,
-                                get_recent_stars_user)
+                                get_recent_stars_user, get_posts_num_plc)
 from quotes_app.main.utils import prepare_posts_display, update_like_table
 from datetime import datetime as dt
 
@@ -48,7 +48,6 @@ def logout():
     logout_user()
     return redirect(url_for('main.home'))
 
-# check how finding recent stars works
 @users.route("/user/<string:username>", methods=['GET', 'POST'])
 @login_required
 def user_profile(username):
@@ -57,12 +56,7 @@ def user_profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     if post_id:
         update_like_table(current_user, post_id)
-    posts = Post.query.filter_by(posted_by=user)\
-        .order_by(Post.date_posted.desc())
-    num_posts = posts.all()
-    num_posts = len(num_posts)
-    num_likes = len(Like.query.filter_by(like_author=user).all())
-    num_comments = len(Comment.query.filter_by(comment_author=user).all())
+    posts, num_posts, num_likes, num_comments = get_posts_num_plc(user)
     posts = posts.paginate(page=page, per_page=5)
     posts_data = prepare_posts_display(posts)
     best_posts = get_best_posts_user(user, 5)
@@ -71,6 +65,19 @@ def user_profile(username):
         posts_data=posts_data, user=user, num_posts=num_posts,
         num_likes=num_likes, num_comments=num_comments, best_posts=best_posts,
         recent_stars=recent_stars)
+
+@users.route("/user/<string:username>/update", methods=['GET', 'POST'])
+@login_required
+def update_profile(username):
+    print('welcome')
+    user = User.query.filter_by(username=username).first_or_404()
+    if user != current_user:
+        flash("You can't update this profile.", 'quotes')
+        return redirect(url_for('main.home'))
+    _, num_posts, num_likes, num_comments = get_posts_num_plc(user)
+    form = UpdateProfileForm()
+    return render_template('update_profile.html', user=user, title='Update Profile',
+        form=form, num_posts=num_posts, num_likes=num_likes, num_comments=num_comments)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])

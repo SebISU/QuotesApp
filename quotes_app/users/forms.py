@@ -1,5 +1,8 @@
+from imghdr import what
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import (StringField, PasswordField, SubmitField,
+                    BooleanField, TextAreaField)
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from quotes_app.models import User
 
@@ -57,3 +60,47 @@ class ResetPasswordForm(FlaskForm):
         EqualTo('password', 'Passwords must match!')])
     submit = SubmitField('Reset Password')
 
+
+class UpdateProfileForm(FlaskForm):
+    username = StringField('Username',
+        validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    profile_pic = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    background_pic = FileField('Update Background Image', validators=[FileAllowed(['jpg', 'png'])])
+    full_name = StringField('Full Name',
+        validators=[DataRequired(), Length(min=1, max=120)])
+    city = StringField('City',
+        validators=[DataRequired(), Length(min=1, max=90)])
+    about = TextAreaField('About', validators=[DataRequired()])
+    submit = SubmitField('Update')
+
+    # custom validators to check if user with such fields values can be created
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('That username is taken. Choose a different one!')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('That email is taken. Choose a different one!')
+
+    def validate_profile_pic(self, profile_pic):
+        if profile_pic:
+            profile_stream = profile_pic.stream
+            header = profile_stream.read(512)
+            stream.seek(0)
+            format = what(None, header)
+            if not format or format not in ['jpg', 'png', 'jpeg']:
+                raise ValidationError('Uploaded profile picture is malformed or wrong file format!')
+
+    def validate_background_pic(self, background_pic):
+        if background_pic:
+            background_stream = background_pic.stream
+            header = background_stream.read(512)
+            stream.seek(0)
+            format = what(None, header)
+            if not format or format not in ['jpg', 'png', 'jpeg']:
+                raise ValidationError('Uploaded background image is malformed or wrong file format!')
