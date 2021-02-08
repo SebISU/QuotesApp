@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="col-md-8 mx-auto">
+    <!-- Profile widget -->
+    <div class="bg-white shadow rounded overflow-hidden">
+        <div class="px-4 pt-0 pb-4 cover">
+            <div class="media align-items-end profile-head">
+                <div class="profile mr-3">
+                    <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="..." width="130" class="rounded mb-2 img-thumbnail img-profile">
+                </div>
+                <div class="media-body mb-5">
+                    <h4 class="mt-0 mb-0 text-white">{{ user.username }}</h4>
+                    <p class="small mb-4 text-white"> <i class="fas fa-map-marker-alt mr-2"></i>Sydney</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-light p-4 d-flex justify-content-end text-center">
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                    <h5 class="font-weight-bold mb-0 d-block">{{ num_posts }}</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Posts</small>
+                </li>
+                <li class="list-inline-item">
+                    <h5 class="font-weight-bold mb-0 d-block">{{ num_likes }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Stars</small>
+                </li>
+                <li class="list-inline-item">
+                    <h5 class="font-weight-bold mb-0 d-block">{{ num_comments }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Comments</small>
+                </li>
+            </ul>
+        </div>
+        <div class="px-4 py-3">
+            <h3 class="pt-5 mb-2 ml-3">Update Profile</h3>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <form method="POST" action="" enctype="multipart/form-data"> <!-- enctype added in order to pass an image data properly -->
+                            {{ form.hidden_tag() }} <!-- sets a csrf token (secret key) -->
+                            <fieldset class="form-group">
+                                <div class="p-4 rounded shadow-sm bg-light">
+                                    <div class="form-group">
+                                        {{ form.username.label(class="form-control-label") }}
+                    
+                                        {% if form.username.errors %}
+                                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.username.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.username(class="form-control form-lg") }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.email.label(class="form-control-label") }}
+                    
+                                        {% if form.email.errors %}
+                                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.email.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.email(class="form-control form-lg") }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <h4 class="pt-5 mb-2">Details</h4>
+                                <div class="p-4 rounded shadow-sm bg-light">
+                                    <div class="form-group">
+                                        {{ form.username.label(class="form-control-label") }}
+                    
+                                        {% if form.username.errors %}
+                                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.username.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.username(class="form-control form-lg") }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.email.label(class="form-control-label") }}
+                    
+                                        {% if form.email.errors %}
+                                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.email.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.email(class="form-control form-lg") }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex form-group mb-0 mt-4 mr-4 justify-content-end">
+                                        {{ form.submit(class="btn btn-outline-info") }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <form class="dropzone" action="https://stackoverflow.com/questions/19006939/why-is-my-dropzone-javascript-form-not-working" method="post" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <input type="file" name="file" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
