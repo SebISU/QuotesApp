@@ -13,6 +13,10 @@ h6 {
     color: #444444;
 }
 
+.name-city-shadow {
+    text-shadow: 2px 0 0 black;
+}
+
 .bg-violet {
     background-color: #451e3e;
 }
@@ -182,7 +186,7 @@ margin-left: 4px;
 .cover {
     /*background-image: url('./background_pics/profile_bg.jpg');*/
     background-size: cover;
-    background-repeat: no-repeat
+    background-repeat: no-repeat;
 }
 
 /* for posts list */

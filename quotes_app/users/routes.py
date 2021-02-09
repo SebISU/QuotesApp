@@ -1,3 +1,7 @@
+# db.engine.table_names() to list all table names in db.
+# MoreInfoUser.__table__.create(db.session.bind) to add the MoreInfoUser table
+# to the existing db.
+
 from flask import (Blueprint, render_template, redirect, flash, request, url_for,
                     Markup)
 from flask_login import login_user, logout_user, current_user, login_required
@@ -25,6 +29,11 @@ def register():
         user = User(username=form.username.data, email=form.email.data,
             password=hashed_password)
         db.session.add(user)
+        db.session.commit()
+        # maybe somehow with just one .commit()?
+        user = User.query.filter_by(username=form.username.data).first()
+        about_user = MoreInfoUser(full_name=form.username.data, info_author=user)
+        db.session.add(about_user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
@@ -75,7 +84,6 @@ def user_profile(username):
 @users.route("/user/<string:username>/update", methods=['GET', 'POST'])
 @login_required
 def update_profile(username):
-    print('welcome')
     user = User.query.filter_by(username=username).first_or_404()
     if user != current_user:
         flash("You can't update this profile.", 'quotes')
@@ -83,6 +91,8 @@ def update_profile(username):
     form = UpdateProfileForm()
     about_user = MoreInfoUser.query.filter_by(info_author=user).first()
     if form.validate_on_submit():
+        # when error occurs during saving/removing pics, filenames in db records
+        # can be wrong
         if form.profile_pic.data:
             profile_pic_file = save_picture(form.profile_pic.data, 1)
             remove_picture(current_user.image_file, 1)
@@ -95,7 +105,7 @@ def update_profile(username):
         current_user.email = form.email.data 
         about_user.full_name = form.full_name.data
         about_user.city = form.city.data
-        about_user.about = form.about.data.replace('\n', '<br>')
+        about_user.about = Markup(form.about.data.replace('\n', '<br>'))
         about_user.last_update = dt.utcnow()
         db.session.commit()
         flash('Your account has been updated!', 'quotes')
@@ -105,14 +115,13 @@ def update_profile(username):
         form.email.data = user.email
         form.full_name.data = about_user.full_name
         form.city.data = about_user.city
-        form.about.data = Markup(about_user.about)
+        form.about.data = about_user.about.replace('<br>', '\n')
     _, num_posts, num_likes, num_comments = get_posts_num_plc(user)
     background_image = url_for('static',
         filename='background_pics/' + about_user.background_pic)
     return render_template('update_profile.html', user=user, title='Update Profile',
         about_user=about_user, background_image=background_image, form=form,
         num_posts=num_posts, num_likes=num_likes, num_comments=num_comments)
-
 
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():

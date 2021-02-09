@@ -1,4 +1,7 @@
-from flask import url_for
+import os
+import secrets
+from PIL import Image
+from flask import url_for, current_app
 from sqlalchemy import func
 from quotes_app import mail
 from flask_mail import Message
@@ -54,19 +57,21 @@ def get_posts_num_plc(user):
 
 # mode 1 means profile picture, mode 2 means background
 def save_picture(picture, mode):
+    # can not be sure that all photos will have exclusive names. Simple user_id
+    # should be better. If not, token on the username basis (all names are exclusive)
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(picture.filename)
     picture_fn = random_hex + f_ext
 
     if mode == 1:
         picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
-        output_size = (375, 375) # think about this
+        output_size = (256, 256)
         i = Image.open(picture)
         i.thumbnail(output_size)
         i.save(picture_path)
     elif mode == 2:
         picture_path = os.path.join(current_app.root_path, 'static/background_pics', picture_fn)
-        output_size = (1250, 1000) # think about this
+        output_size = (1352, 800)
         i = Image.open(picture)
         i.thumbnail(output_size)
         i.save(picture_path)
@@ -76,10 +81,10 @@ def save_picture(picture, mode):
 
 
 def remove_picture(picture, mode):
-    if mode == 1:
+    if mode == 1 and picture != 'default.jpg':
         picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture)
         os.remove(picture_path)
-    elif mode == 2:
+    elif mode == 2 and picture != 'profile_bg.jpg':
         picture_path = os.path.join(current_app.root_path, 'static/background_pics', picture)
         os.remove(picture_path)
     else:

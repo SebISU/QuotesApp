@@ -1,5 +1,6 @@
 from imghdr import what
 from flask_wtf import FlaskForm
+from flask_login import current_user
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import (StringField, PasswordField, SubmitField,
                     BooleanField, TextAreaField)
@@ -88,19 +89,19 @@ class UpdateProfileForm(FlaskForm):
                 raise ValidationError('That email is taken. Choose a different one!')
 
     def validate_profile_pic(self, profile_pic):
-        if profile_pic:
-            profile_stream = profile_pic.stream
+        if profile_pic.data:
+            profile_stream = profile_pic.data.stream
             header = profile_stream.read(512)
-            stream.seek(0)
+            profile_stream.seek(0)
             format = what(None, header)
             if not format or format not in ['jpg', 'png', 'jpeg']:
                 raise ValidationError('Uploaded profile picture is malformed or wrong file format!')
 
     def validate_background_pic(self, background_pic):
-        if background_pic:
-            background_stream = background_pic.stream
+        if background_pic.data:
+            background_stream = background_pic.data.stream
             header = background_stream.read(512)
-            stream.seek(0)
+            background_stream.seek(0)
             format = what(None, header)
             if not format or format not in ['jpg', 'png', 'jpeg']:
                 raise ValidationError('Uploaded background image is malformed or wrong file format!')

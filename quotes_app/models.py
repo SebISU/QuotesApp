@@ -76,9 +76,9 @@ class MoreInfoUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     last_update = db.Column(db.DateTime, nullable=False, default=dt.utcnow)
     background_pic = db.Column(db.String(20), nullable=False, default='profile_bg.jpg')
-    full_name = db.Column(db.String(120), nullable=False, default='Anonymous')
+    full_name = db.Column(db.String(120), nullable=False, default='Adam Smith')
     city = db.Column(db.String(90), nullable=False, default='Sydney')
-    about = db.Column(db.Text, nullable=False, default='I love to meet new people\nLives in Sydney\nAircraft Pilot')
+    about = db.Column(db.Text, nullable=False, default='I love to meet new people<br>Lives in Sydney<br>Aircraft Pilot')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):

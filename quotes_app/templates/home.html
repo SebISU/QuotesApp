@@ -42,7 +42,7 @@
                                 {% for user in post[:-2] %}
                                 <li class="list-inline-item">
                                     <a href="{{ url_for('users.user_profile', username=user.username) }}" >
-                                        <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="DP" class=" rounded-circle img-fluid " width="35" height="35">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="DP" class=" rounded-circle" width="35" height="35">
                                     </a>
                                 </li>
                                 {% endfor %}
