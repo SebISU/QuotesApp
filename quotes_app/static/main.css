@@ -180,7 +180,7 @@ margin-left: 4px;
 }
 
 .cover {
-    background-image: url('./profile_background.jpg');
+    /*background-image: url('./background_pics/profile_bg.jpg');*/
     background-size: cover;
     background-repeat: no-repeat
 }

@@ -5,6 +5,6 @@ from quotes_app.models import User
 
 
 class PostForm(FlaskForm):
-    author = StringField('Author', validators=[DataRequired()])
+    author = StringField('Author', validators=[DataRequired(), Length(min=1, max=100)])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')

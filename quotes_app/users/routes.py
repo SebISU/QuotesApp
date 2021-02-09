@@ -1,11 +1,13 @@
-from flask import Blueprint, render_template, redirect, flash, request, url_for
+from flask import (Blueprint, render_template, redirect, flash, request, url_for,
+                    Markup)
 from flask_login import login_user, logout_user, current_user, login_required
 from quotes_app import db, bcrypt
-from quotes_app.models import User, Post, Like, Comment
+from quotes_app.models import User, Post, Like, Comment, MoreInfoUser
 from quotes_app.users.forms import (RegistrationForm, LoginForm, ResetRequestForm,
                                 ResetPasswordForm, UpdateProfileForm)
 from quotes_app.users.utils import (send_reset_token, get_best_posts_user,
-                                get_recent_stars_user, get_posts_num_plc)
+                                get_recent_stars_user, get_posts_num_plc,
+                                save_picture, remove_picture)
 from quotes_app.main.utils import prepare_posts_display, update_like_table
 from datetime import datetime as dt
 
@@ -54,6 +56,7 @@ def user_profile(username):
     page = request.args.get('page', 1, type=int)
     post_id = request.args.get('star', type=int)
     user = User.query.filter_by(username=username).first_or_404()
+    about_user = MoreInfoUser.query.filter_by(info_author=user).first()
     if post_id:
         update_like_table(current_user, post_id)
     posts, num_posts, num_likes, num_comments = get_posts_num_plc(user)
@@ -61,8 +64,11 @@ def user_profile(username):
     posts_data = prepare_posts_display(posts)
     best_posts = get_best_posts_user(user, 5)
     recent_stars = get_recent_stars_user(user, 5)
+    background_image = url_for('static',
+        filename='background_pics/' + about_user.background_pic)
     return render_template('user_profile.html', title=username, posts=posts,
-        posts_data=posts_data, user=user, num_posts=num_posts,
+        posts_data=posts_data, user=user, about_user=about_user,
+        background_image=background_image, num_posts=num_posts,
         num_likes=num_likes, num_comments=num_comments, best_posts=best_posts,
         recent_stars=recent_stars)
 
@@ -74,10 +80,38 @@ def update_profile(username):
     if user != current_user:
         flash("You can't update this profile.", 'quotes')
         return redirect(url_for('main.home'))
-    _, num_posts, num_likes, num_comments = get_posts_num_plc(user)
     form = UpdateProfileForm()
+    about_user = MoreInfoUser.query.filter_by(info_author=user).first()
+    if form.validate_on_submit():
+        if form.profile_pic.data:
+            profile_pic_file = save_picture(form.profile_pic.data, 1)
+            remove_picture(current_user.image_file, 1)
+            current_user.image_file = profile_pic_file
+        if form.background_pic.data:
+            background_pic_file = save_picture(form.background_pic.data, 2)
+            remove_picture(about_user.background_pic, 2)
+            about_user.background_pic = background_pic_file
+        current_user.username = form.username.data
+        current_user.email = form.email.data 
+        about_user.full_name = form.full_name.data
+        about_user.city = form.city.data
+        about_user.about = form.about.data.replace('\n', '<br>')
+        about_user.last_update = dt.utcnow()
+        db.session.commit()
+        flash('Your account has been updated!', 'quotes')
+        return redirect(url_for('users.user_profile', username=current_user.username))
+    elif request.method == 'GET':
+        form.username.data = user.username
+        form.email.data = user.email
+        form.full_name.data = about_user.full_name
+        form.city.data = about_user.city
+        form.about.data = Markup(about_user.about)
+    _, num_posts, num_likes, num_comments = get_posts_num_plc(user)
+    background_image = url_for('static',
+        filename='background_pics/' + about_user.background_pic)
     return render_template('update_profile.html', user=user, title='Update Profile',
-        form=form, num_posts=num_posts, num_likes=num_likes, num_comments=num_comments)
+        about_user=about_user, background_image=background_image, form=form,
+        num_posts=num_posts, num_likes=num_likes, num_comments=num_comments)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])

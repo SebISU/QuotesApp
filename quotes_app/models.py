@@ -19,9 +19,10 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='posted_by', lazy=True)
     comments = db.relationship('Comment', backref='comment_author', lazy=True)
     likes = db.relationship('Like', backref='like_author', lazy=True)
+    more_info = db.relationship('MoreInfoUser', backref='info_author', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}'"
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
@@ -69,3 +70,16 @@ class Like(db.Model):
 
     def __repr__(self):
         return f"Like('{self.user_id}', '{self.post_id}', '{self.date_like}')"
+
+
+class MoreInfoUser(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    last_update = db.Column(db.DateTime, nullable=False, default=dt.utcnow)
+    background_pic = db.Column(db.String(20), nullable=False, default='profile_bg.jpg')
+    full_name = db.Column(db.String(120), nullable=False, default='Anonymous')
+    city = db.Column(db.String(90), nullable=False, default='Sydney')
+    about = db.Column(db.Text, nullable=False, default='I love to meet new people\nLives in Sydney\nAircraft Pilot')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"MoreInfoUser('{self.user_id}', '{self.full_name}', '{self.city}', '{self.about}')"

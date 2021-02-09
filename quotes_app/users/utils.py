@@ -50,3 +50,38 @@ def get_posts_num_plc(user):
     num_likes = len(Like.query.filter_by(like_author=user).all())
     num_comments = len(Comment.query.filter_by(comment_author=user).all())
     return posts, num_posts, num_likes, num_comments
+
+
+# mode 1 means profile picture, mode 2 means background
+def save_picture(picture, mode):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(picture.filename)
+    picture_fn = random_hex + f_ext
+
+    if mode == 1:
+        picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
+        output_size = (375, 375) # think about this
+        i = Image.open(picture)
+        i.thumbnail(output_size)
+        i.save(picture_path)
+    elif mode == 2:
+        picture_path = os.path.join(current_app.root_path, 'static/background_pics', picture_fn)
+        output_size = (1250, 1000) # think about this
+        i = Image.open(picture)
+        i.thumbnail(output_size)
+        i.save(picture_path)
+    else:
+        return None
+    return picture_fn
+
+
+def remove_picture(picture, mode):
+    if mode == 1:
+        picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture)
+        os.remove(picture_path)
+    elif mode == 2:
+        picture_path = os.path.join(current_app.root_path, 'static/background_pics', picture)
+        os.remove(picture_path)
+    else:
+        return False
+    return True

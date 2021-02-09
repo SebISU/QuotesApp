@@ -3,14 +3,14 @@
 <div class="col-lg-8 mx-auto">
     <!-- Profile widget -->
     <div class="bg-white shadow rounded overflow-hidden">
-        <div class="px-4 pt-0 pb-4 cover">
+        <div class="px-4 pt-0 pb-4 cover" style="background-image: url('{{ background_image }}')">
             <div class="media align-items-end profile-head">
                 <div class="profile mr-3">
                     <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="..." width="130" class="rounded mb-2 img-thumbnail img-profile">
                 </div>
                 <div class="media-body mb-5">
-                    <h4 class="mt-0 mb-0 text-white">{{ user.username }}</h4>
-                    <p class="small mb-4 text-white"> <i class="fas fa-map-marker-alt mr-2"></i>Sydney</p>
+                    <h4 class="mt-0 mb-0 text-white">{{ about_user.full_name }}</h4>
+                    <p class="small mb-4 text-white"> <i class="fas fa-map-marker-alt mr-2"></i>{{ about_user.city }}</p>
                 </div>
             </div>
         </div>
@@ -147,14 +147,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 {% endblock content %}
-
-<div class="input-group"> 
-    <div class="custom-file">
-      <input type="file" class="custom-file-input" id="upload">
-      <label class="custom-file-label" for="upload"><i class="ion-android-cloud-outline"></i>Choose file</label>
-    </div>
-  </div>
