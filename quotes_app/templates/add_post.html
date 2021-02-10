@@ -11,7 +11,7 @@
                     <div class="form-group">
                         {% if form.content.errors %}
                             {{ form.content(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
+                            <div class="invalid-feedback invalid-feedback-yellow">
                                 {% for error in form.content.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
@@ -23,7 +23,7 @@
                     <div class="form-group">
                         {% if form.author.errors %}
                             {{ form.author(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
+                            <div class="invalid-feedback invalid-feedback-yellow">
                                 {% for error in form.author.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}

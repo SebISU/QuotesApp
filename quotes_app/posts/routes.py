@@ -19,3 +19,9 @@ def new_post():
         return redirect(url_for('main.home'))
     return render_template('add_post.html', title='Add Post', form=form)
 
+@posts.route("/post/<int:post_id>")
+@login_required
+def post(post_id):
+    
+    post = Post.query.get_or_404(post_id) # give me a post if it exists of return 404
+    return render_template('post.html', title='Adage Page', post=post)

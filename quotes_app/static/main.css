@@ -79,7 +79,7 @@ h6 {
 .content-section {
     background: #ffffff;
     padding: 10px 20px;
-    border: 1px solid  #A8A8A8;
+    /*border: 1px solid  #A8A8A8;*/
     border-radius: 3px;
     margin-bottom: 20px;
 }
@@ -146,8 +146,26 @@ color: white;
 margin-left: 4px;
 }
 
-.invalid-feedback {
+.invalid-feedback-white {
     color: white;
+}
+
+.invalid-feedback-yellow {
+    color:#ffc312;
+}
+
+.invalid-feedback-fix {
+    display: flex;
+}
+
+.form-control.is-invalid{
+    border-color: white;
+    background-image: none;
+}
+
+.form-control.is-invalid:focus{
+    border-color: white;
+    background-image: none;
 }
 
 .form-control {
@@ -160,21 +178,6 @@ margin-left: 4px;
     border-color: white;
     -webkit-box-shadow: none;
     box-shadow: none;
-}
-
-.form-control.is-invalid{
-    border-color: white;
-    background-image: none;
-}
-
-
-.form-control.is-invalid:focus{
-    border-color: white;
-    background-image: none;
-}
-
-.invalid-feedback-fix {
-    display: flex;
 }
 
 /* for user_profile page*/

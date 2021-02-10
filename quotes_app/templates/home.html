@@ -2,7 +2,8 @@
 {% block content %}
 <div class="col-md-8">
 <!-- posts -->
-    <div class="container">
+<div class="mx-auto">
+    <div class="container py-4 px-4 bg-white shadow rounded overflow-hidden">
         {% for post in posts_data %}
             <div class="card bg-light mb-5 border-5 pt-2 active pb-0 px-3">
                 <div class="card-body ">
@@ -66,8 +67,9 @@
     </div>
 <!-- posts -->
 </div>
+</div>
 <div class="col-md-4">
-    <div class="content-section">
+    <div class="content-section shadow-sm">
         <div class="mb-3 text-center">
             <h3>Best List</h3>
         </div>
@@ -76,13 +78,13 @@
                 <a href="{{ url_for('posts.new_post') }}"><li class="list-group-item list-group-item-light">No Adages. Add one.</li></a>
             {% else %}
                 {% for post in best_posts %}
-                    <a href="#"><li class="list-group-item list-group-item-light">"{{ post.content }}"</li></a>
+                    <a href="#" class="p-1"><li class="list-group-item list-group-item-light">"{{ post.content }}"</li></a>
                 {% endfor %}
             {% endif %}
         </ul>
         </p>
     </div>
-    <div class="content-section">
+    <div class="content-section shadow-sm">
         <div class="mb-3 text-center">
             <h3>Trending</h3>
         </div>
@@ -91,7 +93,7 @@
                 <li class="list-group-item list-group-item-light">No activity. Add an Adage or give a star.</li>
             {% else %}
                 {% for post in trend_posts %}
-                <a href="#"><li class="list-group-item list-group-item-light">"{{ post.content }}"</li></a>
+                <a href="#" class="p-1"><li class="list-group-item list-group-item-light">"{{ post.content }}"</li></a>
                 {% endfor %}
             {% endif %}
         </ul>
