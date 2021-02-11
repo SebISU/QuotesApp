@@ -127,15 +127,21 @@
                                         {{ form.about.label(class="form-control-label") }}
                     
                                         {% if form.about.errors %}
-                                            {{ form.about(class="form-control form-control-lg is-invalid") }}
+                                            {{ form.about(rows="3", class="form-control form-control-lg is-invalid") }}
                                             <div class="invalid-feedback">
                                                 {% for error in form.about.errors %}
                                                     <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                         {% else %}
-                                            {{ form.about(class="form-control form-lg") }}
+                                            {{ form.about(rows="3", class="form-control form-lg") }}
                                         {% endif %}
+                                        <script type="text/javascript">
+                                            $('#about').on('input', function () {
+                                                this.style.height = 'auto';
+                                                this.style.height = (this.scrollHeight) + 'px';
+                                            });
+                                        </script>
                                     </div>
                                     <div class="d-flex form-group mb-0 mt-4 mr-4 justify-content-end">
                                         {{ form.submit(class="btn btn-violet") }}

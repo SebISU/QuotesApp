@@ -5,14 +5,16 @@ from flask_login import current_user
 from quotes_app.models import User, Like, Post
 
 
-def prepare_posts_display(posts):
+def prepare_posts_display(posts, size):
     '''Converts posts to list of lists containing
     [user(for image) x n, post, isStarred(true/false)] records
+    size = how many users to display images to take
     '''
+
     posts_data = []
     for post in posts.items:
         post_info = []
-        likes = Like.query.filter_by(like_post=post).limit(8).all()
+        likes = Like.query.filter_by(like_post=post).limit(size).all()
         for like in likes:
             post_info.append(User.query.get(like.user_id))
         post_info.append(post)

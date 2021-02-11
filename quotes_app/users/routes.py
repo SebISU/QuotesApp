@@ -74,7 +74,7 @@ def user_profile(username):
         update_like_table(current_user, post_id)
     posts, num_posts, num_likes, num_comments = get_posts_num_plc(user)
     posts = posts.paginate(page=page, per_page=5)
-    posts_data = prepare_posts_display(posts)
+    posts_data = prepare_posts_display(posts, 8)
     best_posts = get_best_posts_user(user, 5)
     recent_stars = get_recent_stars_user(user, 5)
     background_image = url_for('static',
@@ -109,7 +109,7 @@ def update_profile(username):
         current_user.email = form.email.data 
         about_user.full_name = form.full_name.data
         about_user.city = form.city.data
-        about_user.about = Markup(form.about.data.replace('\n', '<br>'))
+        about_user.about = Markup(form.about.data.replace('\n', '<br>')) # to make sure that won't be any malicious code in db
         about_user.last_update = dt.utcnow()
         db.session.commit()
         flash('Your account has been updated!', 'quotes')

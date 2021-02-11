@@ -20,7 +20,7 @@ def home():
             flash('Please log in to give a star.', 'quotes')
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
-    posts_data = prepare_posts_display(posts)
+    posts_data = prepare_posts_display(posts, 8)
     best_posts = get_best_posts(5)
     trend_posts = get_trending(5)
     return render_template('home.html', posts=posts, posts_data=posts_data,

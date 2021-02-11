@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
     comments = db.relationship('Comment', backref='comment_author', lazy=True)
     likes = db.relationship('Like', backref='like_author', lazy=True)
     more_info = db.relationship('MoreInfoUser', backref='info_author', lazy=True)
+    like_comments = db.relationship('LikeComment', backref='like_comment_author', lazy=True)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
@@ -57,9 +58,21 @@ class Comment(db.Model):
     date_comment = db.Column(db.DateTime, nullable=False, default=dt.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    likes = db.relationship('LikeComment', backref='comment', lazy=True)
 
     def __repr__(self):
         return f"Comment('{self.content}', '{self.date_comment}')"
+
+
+class LikeComment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_like = db.Column(db.DateTime, nullable=False, default=dt.utcnow)
+    content = db.Column(db.Text, nullable=False, default='unused')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=False)
+
+    def __repr__(self):
+        return f"LikeComment('{self.user_id}', '{self.comment_id}', '{self.date_like}')"
 
 
 class Like(db.Model):
