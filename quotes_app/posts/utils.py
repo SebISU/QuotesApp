@@ -1,6 +1,7 @@
 from quotes_app import db
 from flask_login import current_user
-from quotes_app.models import User, Like, LikeComment
+from sqlalchemy import func
+from quotes_app.models import User, Post, Like, Comment, LikeComment
 
 
 def prepare_post_display(post, size):
@@ -50,3 +51,28 @@ def update_like_comment_table(user, comment_id):
         like = LikeComment(like_comment_author=user, comment_id=comment_id)
         db.session.add(like)
     db.session.commit()
+
+def get_best_comments_post(post, size):
+    comments  = Comment.query.filter_by(comment_post=post).all()
+    num_likes_list = []
+    for comment in comments:
+        num_likes = len(LikeComment.query.filter_by(comment=comment).all())
+        num_likes_list.append([comment, num_likes])
+    num_likes_list.sort(key=lambda x: x[1], reverse=True)
+    return [x[0] for x in num_likes_list[:size]]
+
+def get_stats_post(post):
+    """Returns a list of post stats
+    return format ->  global rank, num_of_likes, num_of_comments
+    """
+    posts = Like.query.with_entities(Like.post_id, func.count(Like.user_id))\
+        .group_by(Like.post_id).order_by(func.count(Like.user_id).desc()).all()
+    glob_rank = len(posts) + 1
+    num_likes = 0
+    for x in range(len(posts)):
+        if posts[x][0] == post.id:
+            glob_rank = x + 1
+            num_likes = posts[x][1]
+            break
+    num_comments = len(Comment.query.filter_by(comment_post=post).all())
+    return glob_rank, num_likes, num_comments

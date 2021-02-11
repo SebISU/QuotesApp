@@ -69,9 +69,10 @@ def user_profile(username):
     page = request.args.get('page', 1, type=int)
     post_id = request.args.get('star', type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    about_user = MoreInfoUser.query.filter_by(info_author=user).first()
     if post_id:
         update_like_table(current_user, post_id)
+        return redirect(url_for('users.user_profile', username=username, page=page))
+    about_user = MoreInfoUser.query.filter_by(info_author=user).first()
     posts, num_posts, num_likes, num_comments = get_posts_num_plc(user)
     posts = posts.paginate(page=page, per_page=5)
     posts_data = prepare_posts_display(posts, 8)
@@ -109,7 +110,8 @@ def update_profile(username):
         current_user.email = form.email.data 
         about_user.full_name = form.full_name.data
         about_user.city = form.city.data
-        about_user.about = Markup(form.about.data.replace('\n', '<br>')) # to make sure that won't be any malicious code in db
+        about = form.about.data.strip(' \n  ,')
+        about_user.about = Markup(about.replace('\n', '<br>')) # to make sure that won't be any malicious code in db
         about_user.last_update = dt.utcnow()
         db.session.commit()
         flash('Your account has been updated!', 'quotes')

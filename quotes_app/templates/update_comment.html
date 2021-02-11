@@ -6,7 +6,7 @@
             <div class="d-flex justify-content-center">
                 <div class="card col-md-7 mt-5">
                     <div class="card-header">
-                        <h3>New Adage</h3>
+                        <h3>Update Comment</h3>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="">
@@ -20,7 +20,7 @@
                                         {% endfor %}
                                     </div>
                                 {% else %}
-                                    {{ form.content(rows="2", class="form-control form-control-lg", placeholder=form.content.label.text) }}
+                                    {{ form.content(rows="2", class="form-control form-control-lg") }}
                                 {% endif %}
                                 <script type="text/javascript">
                                     $('#content').on('input', function () {
@@ -29,20 +29,8 @@
                                     });
                                 </script>
                             </div>
-                            <div class="form-group pt-4">
-                                {% if form.author.errors %}
-                                    {{ form.author(class="form-control form-control-lg is-invalid") }}
-                                    <div class="invalid-feedback invalid-feedback-yellow">
-                                        {% for error in form.author.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.author(class="form-control form-control-lg", placeholder=form.author.label.text) }}
-                                {% endif %}
-                            </div>
                             <div class="form-group">
-                                <input type="submit" value="Add" class="btn float-right login_btn">
+                                <input type="submit" value="Save" class="btn float-right login_btn">
                             </div>
                         </form>
                     </div>

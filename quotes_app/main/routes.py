@@ -1,4 +1,4 @@
-from flask import render_template, request, flash, Blueprint
+from flask import render_template, request, flash, Blueprint, redirect, url_for
 from flask_login import current_user
 from quotes_app.models import Post, Like
 from quotes_app.main.utils import (prepare_posts_display, get_best_posts,
@@ -13,12 +13,13 @@ main = Blueprint('main', __name__)
 def home():
     # add a get_best_posts feature
     post_id = request.args.get('star', type=int)
+    page = request.args.get('page', 1, type=int)
     if post_id:
         if current_user.is_authenticated:
             update_like_table(current_user, post_id)
         else:
             flash('Please log in to give a star.', 'quotes')
-    page = request.args.get('page', 1, type=int)
+        return redirect(url_for('main.home', page=page))
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     posts_data = prepare_posts_display(posts, 8)
     best_posts = get_best_posts(5)
