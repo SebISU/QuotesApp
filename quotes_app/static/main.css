@@ -2,7 +2,12 @@ body {
     background: #f0fafa;
     color: #333333;
     margin-top: 6rem;
+    background-image: url('village_road.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
+/* to set plain background remove last 4 lines */
 
 h1,
 h2,
@@ -11,6 +16,10 @@ h4,
 h5,
 h6 {
     color: #444444;
+}
+
+a, a:active, a:focus {
+    outline: none;
 }
 
 .name-city-shadow {
@@ -23,14 +32,13 @@ h6 {
 
 .btn-outline-violet {
     color: #451e3e;
-    border-color: #451e3e;
+    border-color: #451e3e !important;
 }
 
 .btn-outline-violet:hover {
     background-color: #451e3e;
     color: white;
 }
-
 
 .btn-outline-violet:focus {
     -webkit-box-shadow: none;
@@ -41,7 +49,7 @@ h6 {
 
 .btn-violet {
     color: white;
-    border-color: #451e3e;
+    border-color: #451e3e !important;
     background-color: #451e3e;
 }
 
@@ -57,6 +65,10 @@ h6 {
 
 .list-group a {
     text-decoration: none;
+}
+
+.list-group-item-light {
+    background-color: #f8f9fa;
 }
 
 .link-post-content a {
@@ -79,7 +91,6 @@ h6 {
 .content-section {
     background: #ffffff;
     padding: 10px 20px;
-    /*border: 1px solid  #A8A8A8;*/
     border-radius: 3px;
     margin-bottom: 20px;
 }
@@ -87,13 +98,13 @@ h6 {
 .footer {
     width: 100%;
     text-align: center;
+    color: white;
 }
 
 .alert-quotes {
     color:white;
     background-color:#451e3e;
     border-color: #451e3e;
-    /*opacity: 0.8;*/
 }
 
 /* for post item */
@@ -106,9 +117,13 @@ h6 {
 .card {
 background: #451e3e;
 padding: 10px 20px;
-border: 1px solid  #f8f9fa;
+border: 1px solid  #dddddd;
 border-radius: 8px;
 margin-bottom: 20px;
+}
+
+.card-form {
+    border-color: #451e3e;
 }
 
 .card-header h3{
@@ -118,7 +133,6 @@ color: #ffffff;
 input:focus{
 outline: none;
 box-shadow: 0 0 0 0 !important;
-
 }
 
 .form-check{
@@ -131,14 +145,15 @@ transform: scale(1.5);
 margin-right: 5px;
 }
 
-.login_btn{
+.btn-login{
 color: black;
 background-color: #ffc312;
+border-color:#ffc312 !important;
 width: 100px;
 margin-top: 10px;
 }
 
-.login_btn:hover{
+.btn-login:hover{
 color: black;
 background-color: #ebb002;
 }
@@ -171,6 +186,18 @@ margin-left: 4px;
 .form-control.is-invalid:focus{
     border-color: white;
     background-image: none;
+}
+
+.btn {
+    border-color: white;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.btn:focus {
+    border-color: white;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .form-control {

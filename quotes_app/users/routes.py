@@ -51,7 +51,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
-            flash('Login Unsuccessfull. Please check email or password', 'quotes')
+            flash('Login Unsuccessfull. Please check email or password', 'info')
     return render_template('login.html', title='Sign In', form=form)
 
 @users.route("/logout")
@@ -91,7 +91,7 @@ def user_profile(username):
 def update_profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     if user != current_user:
-        flash("You can't update this profile.", 'quotes')
+        flash("You can't update this profile.", 'info')
         return redirect(url_for('main.home'))
     form = UpdateProfileForm()
     about_user = MoreInfoUser.query.filter_by(info_author=user).first()
@@ -114,7 +114,7 @@ def update_profile(username):
         about_user.about = Markup(about.replace('\n', '<br>')) # to make sure that won't be any malicious code in db
         about_user.last_update = dt.utcnow()
         db.session.commit()
-        flash('Your account has been updated!', 'quotes')
+        flash('Your account has been updated!', 'info')
         return redirect(url_for('users.user_profile', username=current_user.username))
     elif request.method == 'GET':
         form.username.data = user.username
@@ -137,7 +137,7 @@ def reset_request():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_token(user)
-        flash('An email has been sent with instructions to reset your password.', 'quotes')
+        flash('An email has been sent with instructions to reset your password.', 'info')
         return redirect(url_for('users.login'))
     return render_template('reset_request.html', title='Reset Password Reqeust', form=form)
 
@@ -147,13 +147,13 @@ def reset_password(token):
         return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)
     if user is None:
-        flash('That is an invalid or expired token!', 'quotes')
+        flash('That is an invalid or expired token!', 'info')
         redirect(url_for('users.reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user.password = hashed_password
         db.session.commit()
-        flash('Your password has been updated! You are now able to log in', 'quotes')
+        flash('Your password has been updated! You are now able to log in', 'info')
         return redirect(url_for('users.login'))
     return render_template('reset_token.html', title='Reset Password', form=form)

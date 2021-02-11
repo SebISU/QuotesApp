@@ -22,7 +22,7 @@ def new_post():
             content=Markup(content.replace('\n', '<br>')), posted_by=current_user)
         db.session.add(post)
         db.session.commit()
-        flash('Your post has been added!', 'quotes')
+        flash('Your post has been added!', 'info')
         return redirect(url_for('main.home'))
     return render_template('add_post.html', title='Add Post', form=form)
 
@@ -37,7 +37,7 @@ def post(post_id):
             comment_author=current_user, comment_post=post)
         db.session.add(comment)
         db.session.commit()
-        flash('Your comment has been added.', 'quotes')
+        flash('Your comment has been added.', 'info')
         # here must be redirect. If not you will render a template with the filled form,
         # even submitted. What is more, browser keeps state of the last request,
         # so if you refresh you will submit this form again.
@@ -66,7 +66,7 @@ def post(post_id):
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.posted_by != current_user:
-        flash('Only author can update a post.', 'quotes')
+        flash('Only author can update a post.', 'info')
         return redirect(url_for('posts.post', post_id=post_id))
     form = PostForm()
     if form.validate_on_submit():
@@ -74,7 +74,7 @@ def update_post(post_id):
         post.content = Markup(content.replace('\n', '<br>'))
         post.author = form.author.data
         db.session.commit()
-        flash('Your post has been updated.', 'quotes')
+        flash('Your post has been updated.', 'info')
         return redirect(url_for('posts.post', post_id=post_id))
     elif request.method == 'GET':
         form.content.data = post.content.replace('<br>', '\n')
@@ -86,7 +86,7 @@ def update_post(post_id):
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.posted_by != current_user:
-        flash('Only author can delete a post.', 'quotes')
+        flash('Only author can delete a post.', 'info')
         return redirect(url_for('posts.post', post_id=post_id))
     comments = Comment.query.filter_by(comment_post=post)
     for comment in comments.all():
@@ -95,7 +95,7 @@ def delete_post(post_id):
     Like.query.filter_by(like_post=post).delete()
     db.session.delete(post)
     db.session.commit()
-    flash('Your post has been deleted!', 'quotes')
+    flash('Your post has been deleted!', 'info')
     return redirect(url_for('main.home'))
 
 @posts.route("/comment/<int:comment_id>/update", methods=['GET','POST'])
@@ -107,14 +107,14 @@ def update_comment(comment_id):
     if not post_id or not page:
         abort(400)
     if comment.comment_author != current_user:
-        flash('Only author can update a comment.', 'quotes')
+        flash('Only author can update a comment.', 'info')
         return redirect(url_for('posts.post', post_id=post_id, page=page))
     form = CommentForm()
     if form.validate_on_submit():
         content = form.content.data.strip(' \n  ,')
         comment.content = Markup(content.replace('\n', '<br>'))
         db.session.commit()
-        flash('Your comment has been updated.', 'quotes')
+        flash('Your comment has been updated.', 'info')
         return redirect(url_for('posts.post', post_id=post_id, page=page))
     elif request.method == 'GET':
         form.content.data = comment.content.replace('<br>', '\n')
@@ -126,14 +126,14 @@ def delete_comment(comment_id):
     comment = Comment.query.get_or_404(comment_id)
     if comment.comment_author != current_user \
     and comment.comment_post.posted_by != current_user:
-        flash('You can not delete this comment.', 'qoutes')
+        flash('You can not delete this comment.', 'info')
         return redirect(url_for('posts.post', post_id=comment.post_id))
     post_id = comment.post_id
     LikeComment.query.filter_by(comment=comment).delete()
     db.session.delete(comment)
     db.session.commit()
     if comment.comment_author == current_user:
-        flash('Your comment has been deleted!', 'quotes')
+        flash('Your comment has been deleted!', 'info')
     else:
-        flash('Comment has been deleted!', 'quotes')
+        flash('Comment has been deleted!', 'info')
     return redirect(url_for('posts.post', post_id=post_id))

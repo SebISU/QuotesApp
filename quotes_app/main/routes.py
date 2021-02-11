@@ -18,7 +18,7 @@ def home():
         if current_user.is_authenticated:
             update_like_table(current_user, post_id)
         else:
-            flash('Please log in to give a star.', 'quotes')
+            flash('Please log in to give a star.', 'info')
         return redirect(url_for('main.home', page=page))
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     posts_data = prepare_posts_display(posts, 8)
