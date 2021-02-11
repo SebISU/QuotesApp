@@ -205,8 +205,8 @@ margin-left: 4px;
 }
 
 .vl {
-    margin: 8px !important;
-    width: 2px;
+    margin: 0px !important;
+    width: 1px;
     border-right: 1px solid #aaaaaa;
     height: 25px
 }
