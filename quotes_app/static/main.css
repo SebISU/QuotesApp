@@ -36,7 +36,7 @@ h6 {
     color: #444444;
 }
 
-a, a:active, a:focus {
+a, a:active, a:focus, button, button:active, button:focus {
     outline: none;
 }
 
@@ -104,6 +104,23 @@ a, a:active, a:focus {
 
 .site-header .navbar-nav .nav-link.active {
     font-weight: 500;
+}
+
+.input-group {
+    background-color: white;
+    border-radius: 6px;
+}
+
+.navbar-helper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.nav-form {
+    max-width: 700px;
 }
 
 .content-section {
