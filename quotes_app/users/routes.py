@@ -6,7 +6,7 @@ from flask import (Blueprint, render_template, redirect, flash, request, url_for
                     Markup)
 from flask_login import login_user, logout_user, current_user, login_required
 from quotes_app import db, bcrypt
-from quotes_app.models import User, Post, Like, Comment, MoreInfoUser
+from quotes_app.models import User, Post, Like, Comment, MoreInfoUser, LikeComment
 from quotes_app.users.forms import (RegistrationForm, LoginForm, ResetRequestForm,
                                 ResetPasswordForm, UpdateProfileForm)
 from quotes_app.users.utils import (send_reset_token, get_best_posts_user,
@@ -21,37 +21,6 @@ users = Blueprint('users', __name__)
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
-    user1 = User.query.filter_by(username='qwer').first()
-    user2 = User.query.filter_by(username='wert').first()
-    user3 = User.query.filter_by(username='erty').first()
-    user4 = User.query.filter_by(username='rtyu').first()
-    user5 = User.query.filter_by(username='tyui').first()
-    user6 = User.query.filter_by(username='yuio').first()
-    user7 = User.query.filter_by(username='uiop').first()
-    user8 = User.query.filter_by(username='asdf').first()
-    user9 = User.query.filter_by(username='sdfg').first()
-    user10 = User.query.filter_by(username='dfgh').first()
-    post1 = Post(author='unknown', content='If you think nobody cares about you, try missing a couple of payments', posted_by=user1)
-    post2 = Post(author='anonymous', content='The difference between stupidity and genius is that genius has its limits', posted_by=user2)
-    post3 = Post(author='unknown', content='You can always tell when a man is well informed. His views are pretty much like your own', posted_by=user3)
-    post4 = Post(author='anonymous', content='Here is something to think about: How come you never see a headline like Psychic Wins Lottery', posted_by=user4)
-    post5 = Post(author='unknown', content='A lie gets halfway around the world before the truth has a chance to get its pants on', posted_by=user5)
-    post6 = Post(author='anonymous', content='Never miss a good chance to shut up', posted_by=user6)
-    post7 = Post(author='unknown', content='If you want your children to listen, try talking softly to someone else', posted_by=user7)
-    post8 = Post(author='anonymous', content='A black cat crossing your path signifies that the animal is going somewhere', posted_by=user8)
-    post9 = Post(author='unknown', content='If you think you are too small to make a difference, try sleeping with a mosquito', posted_by=user9)
-    post10 = Post(author='anonymous', content='Education is what remains after one has forgotten what one has learned in school', posted_by=user10)
-    db.session.add(post1)
-    db.session.add(post2)
-    db.session.add(post3)
-    db.session.add(post4)
-    db.session.add(post5)
-    db.session.add(post6)
-    db.session.add(post7)
-    db.session.add(post8)
-    db.session.add(post9)
-    db.session.add(post10)
-    db.session.commit()
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = RegistrationForm()
@@ -105,7 +74,7 @@ def user_profile(username):
     about_user = MoreInfoUser.query.filter_by(info_author=user).first()
     posts, num_posts, num_likes, num_comments = get_posts_num_plc(user)
     posts = posts.paginate(page=page, per_page=5)
-    posts_data = prepare_posts_display(posts, 8)
+    posts_data = prepare_posts_display(posts, 10)
     best_posts = get_best_posts_user(user, 5)
     recent_stars = get_recent_stars_user(user, 5)
     background_image = url_for('static',

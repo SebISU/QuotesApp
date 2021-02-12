@@ -17,7 +17,7 @@ posts = Blueprint('posts', __name__)
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        content = form.content.data.strip(' \n  ,')
+        content = form.content.data.strip(' \n  ,.')
         post = Post(author=form.author.data,
             content=Markup(content.replace('\n', '<br>')), posted_by=current_user)
         db.session.add(post)
@@ -52,9 +52,9 @@ def post(post_id):
             update_like_comment_table(current_user, comment_id)
         return redirect(url_for('posts.post', post_id=post.id, page=page))
     comments = Comment.query.filter_by(comment_post=post).order_by(Comment.date_comment.desc())\
-        .paginate(page=page, per_page=10)
-    post_data = prepare_post_display(post, 8)
-    comments_data = prepare_comments_display(comments, 8)
+        .paginate(page=page, per_page=5)
+    post_data = prepare_post_display(post, 11)
+    comments_data = prepare_comments_display(comments, 9)
     best_comments = get_best_comments_post(post, 5)
     stats = get_stats_post(post)
     return render_template('post.html', title='Adage Page', post_data=post_data, form=form,
@@ -70,7 +70,7 @@ def update_post(post_id):
         return redirect(url_for('posts.post', post_id=post_id))
     form = PostForm()
     if form.validate_on_submit():
-        content = form.content.data.strip(' \n  ,')
+        content = form.content.data.strip(' \n  ,.')
         post.content = Markup(content.replace('\n', '<br>'))
         post.author = form.author.data
         db.session.commit()

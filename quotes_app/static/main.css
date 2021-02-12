@@ -1,4 +1,11 @@
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     background: #f0fafa;
     color: #333333;
     margin-top: 6rem;
@@ -8,6 +15,17 @@ body {
     background-size: cover;
 }
 /* to set plain background remove last 4 lines */
+
+
+.content {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+    width: 100%;
+    text-align: center;
+}
 
 h1,
 h2,
@@ -95,12 +113,6 @@ a, a:active, a:focus {
     margin-bottom: 20px;
 }
 
-.footer {
-    width: 100%;
-    text-align: center;
-    color: white;
-}
-
 .alert-quotes {
     color:white;
     background-color:#451e3e;
@@ -131,18 +143,20 @@ color: #ffffff;
 }
 
 input:focus{
-outline: none;
-box-shadow: 0 0 0 0 !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .form-check{
 color: white;
+padding-left:  5px;
 }
 
 .form-check input
 {
 transform: scale(1.5);
 margin-right: 5px;
+margin-left: 0px;
 }
 
 .btn-login{
@@ -219,17 +233,11 @@ margin-left: 4px;
 }
 
 .cover {
-    /*background-image: url('./background_pics/profile_bg.jpg');*/
     background-size: cover;
     background-repeat: no-repeat;
 }
 
 /* for posts list */
-
-
-.more {
-    opacity: 0.5 !important
-}
 
 .vl {
     margin: 0px !important;
