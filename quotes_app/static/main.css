@@ -82,6 +82,7 @@ a, a:active, a:focus, button, button:active, button:focus {
 }
 
 .btn-filter:hover {
+    background-color: #f8f9fa;
     border-color: white;
     color: #777777;
 }
@@ -92,7 +93,7 @@ a, a:active, a:focus, button, button:active, button:focus {
 }
 
 .btn-drop-grey {
-    background-color: #dddddd;
+    background-color: white;
     color: #333333;
     margin-bottom: 2px;
     border-color: #aaaaaa !important;
