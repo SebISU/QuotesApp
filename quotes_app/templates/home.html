@@ -4,6 +4,27 @@
     <!-- posts -->
     <div class="mx-auto">
         <div class="container py-4 px-4 mb-4 bg-white shadow rounded overflow-hidden">
+            <div class="card rounded card-nf bg-white p-0">
+                <div class="card-body p-0">
+                    <div class="d-flex flex-wrap">
+                        <div class="mr-auto">
+                            <div class="dropdown">
+                                <button class="btn btn-filter btn-order p-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="{{ url_for('static', filename='filter.png') }}" width="40" height="40">
+                                </button>
+                                <div class="dropdown-menu m-0" aria-labelledby="dropdownMenuButton">
+                                    <a href="#" class="btn btn-drop-grey btn-order ml-1" role="button" aria-pressed="true">New</a>
+                                    <a href="#" class="btn btn-drop-grey btn-order ml-1" role="button" aria-pressed="true">Top</a>
+                                    <a href="#" class="btn btn-drop-grey btn-order ml-1" role="button" aria-pressed="true">Trending</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ml-auto">
+                            <a href="{{ url_for('posts.new_post') }}" class="btn btn-lg btn-order btn-violet m-0" role="button" aria-pressed="true">New Adage</a>
+                        </div>
+                    </div> 
+                </div>
+            </div>
             {% for post in posts_data %}
                 <div class="card rounded shadow bg-light py-2 mb-5">
                     <div class="card-body">

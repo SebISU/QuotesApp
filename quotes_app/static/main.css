@@ -76,9 +76,60 @@ a, a:active, a:focus, button, button:active, button:focus {
     background-color: #63345b;
 }
 
+.btn-filter {
+    border-color: white;
+    color: #777777;
+}
+
+.btn-filter:hover {
+    border-color: white;
+    color: #777777;
+}
+
+.btn-filter:focus {
+    border-color: white;
+    color: #777777;
+}
+
+.btn-drop-grey {
+    background-color: #dddddd;
+    color: #333333;
+    margin-bottom: 2px;
+    border-color: #aaaaaa !important;
+}
+
+.btn-drop-grey:hover {
+    background-color: #dddddd;
+    color: #333333;
+    border-color: #aaaaaa;
+}
+
+.btn-drop-grey:focus {
+    background-color: #dddddd;
+    color: #333333;
+    border-color: #aaaaaa;
+}
+
 .btn-link-own {
     color: white;
     text-decoration: underline;
+}
+
+.btn-order {
+    min-height: 45px;
+    min-width: 102px;
+    max-width: 130px;
+}
+
+.btn-lg {
+    padding: .375rem .75rem;
+}
+
+.dropdown-menu {
+    min-width: 0px;
+    padding: 0px;
+    background-color: transparent;
+    border: none;
 }
 
 .list-group a {
@@ -149,6 +200,10 @@ padding: 10px 20px;
 border: 1px solid  #dddddd;
 border-radius: 8px;
 margin-bottom: 20px;
+}
+
+.card-nf {
+    border: 1px solid  white;
 }
 
 .card-form {
