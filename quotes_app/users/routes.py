@@ -13,6 +13,7 @@ from quotes_app.users.utils import (send_reset_token, get_best_posts_user,
                                 get_recent_stars_user, get_posts_num_plc,
                                 save_picture, remove_picture)
 from quotes_app.main.utils import prepare_posts_display, update_like_table
+from quotes_app.main.forms import SearchForm
 from datetime import datetime as dt
 
 
@@ -21,6 +22,10 @@ users = Blueprint('users', __name__)
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = RegistrationForm()
@@ -37,10 +42,14 @@ def register():
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'info')
         return redirect(url_for('users.login'))
-    return render_template('register.html', title='Sign Up', form=form)
+    return render_template('register.html', title='Sign Up', form=form, schform=schform)
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))    
     form = LoginForm()
@@ -52,7 +61,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
             flash('Login Unsuccessfull. Please check email or password', 'info')
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In', form=form, schform=schform)
 
 @users.route("/logout")
 def logout():
@@ -65,6 +74,10 @@ def logout():
 @users.route("/user/<string:username>", methods=['GET', 'POST'])
 @login_required
 def user_profile(username):
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     page = request.args.get('page', 1, type=int)
     post_id = request.args.get('star', type=int)
     user = User.query.filter_by(username=username).first_or_404()
@@ -74,13 +87,13 @@ def user_profile(username):
     about_user = MoreInfoUser.query.filter_by(info_author=user).first()
     posts, num_posts, num_likes, num_comments = get_posts_num_plc(user)
     posts = posts.paginate(page=page, per_page=5)
-    posts_data = prepare_posts_display(posts, 10)
+    posts_data = prepare_posts_display(posts.items, 10)
     best_posts = get_best_posts_user(user, 5)
     recent_stars = get_recent_stars_user(user, 5)
     background_image = url_for('static',
         filename='background_pics/' + about_user.background_pic)
     return render_template('user_profile.html', title=username, posts=posts,
-        posts_data=posts_data, user=user, about_user=about_user,
+        posts_data=posts_data, schform=schform, user=user, about_user=about_user,
         background_image=background_image, num_posts=num_posts,
         num_likes=num_likes, num_comments=num_comments, best_posts=best_posts,
         recent_stars=recent_stars)
@@ -92,6 +105,10 @@ def update_profile(username):
     if user != current_user:
         flash("You can't update this profile.", 'info')
         return redirect(url_for('main.home'))
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     form = UpdateProfileForm()
     about_user = MoreInfoUser.query.filter_by(info_author=user).first()
     if form.validate_on_submit():
@@ -125,25 +142,34 @@ def update_profile(username):
     background_image = url_for('static',
         filename='background_pics/' + about_user.background_pic)
     return render_template('update_profile.html', user=user, title='Update Profile',
-        about_user=about_user, background_image=background_image, form=form,
-        num_posts=num_posts, num_likes=num_likes, num_comments=num_comments)
+        about_user=about_user, background_image=background_image, schform=schform,
+        form=form, num_posts=num_posts, num_likes=num_likes, num_comments=num_comments)
 
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     form = ResetRequestForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_token(user)
         flash('An email has been sent with instructions to reset your password.', 'info')
         return redirect(url_for('users.login'))
-    return render_template('reset_request.html', title='Reset Password Reqeust', form=form)
+    return render_template('reset_request.html', title='Reset Password Reqeust', form=form,
+        schform=schform)
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     user = User.verify_reset_token(token)
     if user is None:
         flash('That is an invalid or expired token!', 'info')
@@ -155,4 +181,5 @@ def reset_password(token):
         db.session.commit()
         flash('Your password has been updated! You are now able to log in', 'info')
         return redirect(url_for('users.login'))
-    return render_template('reset_token.html', title='Reset Password', form=form)
+    return render_template('reset_token.html', title='Reset Password', form=form,
+        schform=schform)

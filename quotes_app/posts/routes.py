@@ -8,6 +8,7 @@ from quotes_app.posts.utils import (prepare_post_display, prepare_comments_displ
                                     update_like_comment_table, get_best_comments_post,
                                     get_stats_post)
 from quotes_app.main.utils import update_like_table
+from quotes_app.main.forms import SearchForm
 from datetime import datetime as dt
 
 posts = Blueprint('posts', __name__)
@@ -15,6 +16,10 @@ posts = Blueprint('posts', __name__)
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     form = PostForm()
     if form.validate_on_submit():
         content = form.content.data.strip(' \n  ,.')
@@ -24,11 +29,16 @@ def new_post():
         db.session.commit()
         flash('Your post has been added!', 'info')
         return redirect(url_for('main.home'))
-    return render_template('add_post.html', title='Add Post', form=form)
+    return render_template('add_post.html', title='Add Post', form=form,
+        schform=schform)
 
 @posts.route("/post/<int:post_id>", methods=['GET', 'POST'])
 @login_required
 def post(post_id):
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     post = Post.query.get_or_404(post_id)
     form = CommentForm()
     if form.validate_on_submit():
@@ -58,12 +68,16 @@ def post(post_id):
     best_comments = get_best_comments_post(post, 5)
     stats = get_stats_post(post)
     return render_template('post.html', title='Adage Page', post_data=post_data, form=form,
-        comments=comments, comments_data=comments_data, stats=stats,
+        schform=schform, comments=comments, comments_data=comments_data, stats=stats,
         best_comments=best_comments)
 
 @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     post = Post.query.get_or_404(post_id)
     if post.posted_by != current_user:
         flash('Only author can update a post.', 'info')
@@ -79,7 +93,8 @@ def update_post(post_id):
     elif request.method == 'GET':
         form.content.data = post.content.replace('<br>', '\n')
         form.author.data = post.author
-    return render_template('update_post.html', title='Update Adage', form=form)
+    return render_template('update_post.html', title='Update Adage', form=form,
+        schform=schform)
 
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
@@ -101,6 +116,10 @@ def delete_post(post_id):
 @posts.route("/comment/<int:comment_id>/update", methods=['GET','POST'])
 @login_required
 def update_comment(comment_id):
+    schform = SearchForm()
+    if schform.validate_on_submit():
+        if schform.content.data != '':
+            return redirect(url_for('main.home', sch=schform.content.data))
     comment = Comment.query.get_or_404(comment_id)
     post_id = request.args.get('post_id', type=int)
     page = request.args.get('page', 1, type=int)
@@ -118,7 +137,8 @@ def update_comment(comment_id):
         return redirect(url_for('posts.post', post_id=post_id, page=page))
     elif request.method == 'GET':
         form.content.data = comment.content.replace('<br>', '\n')
-    return render_template('update_comment.html', title='Update Comment', form=form)
+    return render_template('update_comment.html', title='Update Comment', form=form,
+        schform=schform)
 
 @posts.route("/comment/<int:comment_id>/delete", methods=['POST'])
 @login_required

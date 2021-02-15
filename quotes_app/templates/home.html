@@ -7,15 +7,21 @@
             <div class="card rounded card-nf bg-white p-0">
                 <div class="card-body p-0">
                     <div class="d-flex flex-wrap">
-                        <div class="mr-auto">
+                        <div class="ml-1 mr-auto">
                             <div class="dropdown">
                                 <button class="btn btn-filter btn-order p-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <img src="{{ url_for('static', filename='filter.png') }}" width="40" height="40">
                                 </button>
                                 <div class="dropdown-menu m-0" aria-labelledby="dropdownMenuButton">
-                                    <a href="#" class="btn btn-drop-grey btn-order ml-1" role="button" aria-pressed="true">New</a>
-                                    <a href="#" class="btn btn-drop-grey btn-order ml-1" role="button" aria-pressed="true">Top</a>
-                                    <a href="#" class="btn btn-drop-grey btn-order ml-1" role="button" aria-pressed="true">Trending</a>
+                                    {% if search %}
+                                        <a href="{{ url_for('main.home', sch=search, srt='n') }}" class="btn btn-drop-grey btn-order" role="button" aria-pressed="true">New</a>
+                                        <a href="{{ url_for('main.home', sch=search, srt='t') }}" class="btn btn-drop-grey btn-order" role="button" aria-pressed="true">Top</a>
+                                        <a href="{{ url_for('main.home', sch=search, srt='tr') }}" class="btn btn-drop-grey btn-order" role="button" aria-pressed="true">Trending</a>
+                                    {% else %}
+                                        <a href="{{ url_for('main.home', srt='n') }}" class="btn btn-drop-grey btn-order" role="button" aria-pressed="true">New</a>
+                                        <a href="{{ url_for('main.home', srt='t') }}" class="btn btn-drop-grey btn-order" role="button" aria-pressed="true">Top</a>
+                                        <a href="{{ url_for('main.home', srt='tr') }}" class="btn btn-drop-grey btn-order" role="button" aria-pressed="true">Trending</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -50,7 +56,11 @@
                                     <small>COMMENT</small>
                                 </a>
                                 <span class="vl mr-2 ml-0"></span>
-                                <a href="{{ url_for('main.home', page=posts.page, star=post[-2].id) }}" class="btn btn-outlined btn-black text-muted bg-transparent p-1 ml-2 mr-0" data-wow-delay="0.7s">
+                                {% if search %}
+                                    <a href="{{ url_for('main.home', page=page, star=post[-2].id, sch=search, srt=sort) }}" class="btn btn-outlined btn-black text-muted bg-transparent p-1 ml-2 mr-0" data-wow-delay="0.7s"></a>
+                                {% else %}
+                                    <a href="{{ url_for('main.home', page=page, star=post[-2].id, srt=sort) }}" class="btn btn-outlined btn-black text-muted bg-transparent p-1 ml-2 mr-0" data-wow-delay="0.7s">
+                                {% endif %}
                                 {% if post[-1] == True %}
                                     <img src="{{ url_for('static', filename='christmas-star.png') }}" width="19" height="19">
                                 {% else %}
@@ -63,7 +73,7 @@
                                 <ul class="list-inline mb-0">
                                     {% for user in post[:-2] %}
                                     <li class="list-inline-item">
-                                        <a href="{{ url_for('users.user_profile', username=user.username) }}" >
+                                        <a href="{{ url_for('users.user_profile', username=user.username) }}">
                                             <img src="{{ url_for('static', filename='profile_pics/' + user.image_file) }}" alt="DP" class=" rounded-circle" width="35" height="35">
                                         </a>
                                     </li>
@@ -75,12 +85,20 @@
                 </div>
             {% endfor %}
             <div class="container d-flex justify-content-center">
-                {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=3) %}
+                {% for page_num in num_pages %}
                     {% if page_num %}
-                        {% if posts.page == page_num %}
-                        <a class="mr-1 mb-4 btn btn-violet" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+                        {% if page == page_num %}
+                            {% if search %}
+                                <a class="mr-1 mb-4 btn btn-violet" href="{{ url_for('main.home', page=page_num, sch=search, srt=sort) }}">{{ page_num }}</a>
+                            {% else %}
+                                <a class="mr-1 mb-4 btn btn-violet" href="{{ url_for('main.home', page=page_num, srt=sort) }}">{{ page_num }}</a>
+                            {% endif %}
                         {% else %}
-                            <a class="mr-1 mb-4 btn btn-outline-violet" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+                            {% if search %}
+                                <a class="mr-1 mb-4 btn btn-outline-violet" href="{{ url_for('main.home', page=page_num, sch=search, srt=sort) }}">{{ page_num }}</a>
+                            {% else %}
+                                <a class="mr-1 mb-4 btn btn-outline-violet" href="{{ url_for('main.home', page=page_num, srt=sort) }}">{{ page_num }}</a>
+                            {% endif %}
                         {% endif %}
                     {% else %}
                         ...

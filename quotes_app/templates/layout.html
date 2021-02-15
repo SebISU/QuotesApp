@@ -27,16 +27,11 @@
                         <a class="navbar-brand" href="{{ url_for('main.home') }}">SageSAY</a>
                     </div>
                     <div class="nav-form w-100 pr-2">
-                        <form>
+                        <form method="POST" action="">
                             <div class="input-group">
-                                <!-- add search form here -->
-                                <div class="btn pl-2 pr-1 pt-1">
-                                    <a href="#" data-wow-delay="0.7s">
-                                        <img src="{{ url_for('static', filename='search.png') }}" width="25" height="25">
-                                    </a>
-                                </div>
-                                <input type="text" class="form-control px-0" placeholder="Search">
-                                <!-- add search form here -->
+                                    {{ schform.hidden_tag() }}
+                                    <input type="image" src="{{ url_for('static', filename='search.png') }}" alt="submit"/>
+                                    {{ schform.content(class="form-control pl-1 pr-0", placeholder=schform.content.label.text) }}
                             </div>
                         </form>
                     </div>
