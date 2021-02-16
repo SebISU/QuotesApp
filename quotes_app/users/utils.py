@@ -20,28 +20,21 @@ If you did not make this request then simply ignore this email and no changes wi
     mail.send(msg)
 
 
-# by stars. If not enough,the oldest posts without stars are added
+# by stars. If not enough,the newest posts without stars are added
 def get_best_posts_user(user, size):
-    posts = Like.query.with_entities(Like.post_id, func.count(Like.user_id))\
-        .group_by(Like.post_id).order_by(func.count(Like.user_id).desc()).all()
-    prep_posts = []
-    for item in posts:
-        post = Post.query.get(item[0])
-        if post.posted_by == user:
-            prep_posts.append(post)
-        if len(prep_posts) == size:
-            return prep_posts
-    prep_posts = prep_posts + Post.query.filter(Post.user_id == user.id, Post.id.\
-            notin_([item.id for item in prep_posts])).order_by(Post.date_posted).\
-            limit(size-len(prep_posts)).all()
-    return prep_posts
+
+    sub_query = Like.query.with_entities(Like.post_id,
+        func.count(Like.user_id).label('sum_likes')).group_by(Like.post_id).subquery()
+    posts = Post.query.filter_by(posted_by=user).with_entities(Post)\
+        .join(sub_query, Post.id==sub_query.c.post_id, isouter=True)\
+        .order_by(sub_query.c.sum_likes.desc(), Post.date_posted.desc()).limit(size).all()
+    return posts
 
 
 def get_recent_stars_user(user, size):
-    likes = Like.query.filter_by(like_author=user).order_by(Like.date_like.desc()).limit(size).all()
-    posts = []
-    for like in likes:
-        posts.append(Post.query.get(like.post_id))
+    sub_query = Like.query.filter_by(like_author=user)\
+        .order_by(Like.date_like.desc()).limit(size).subquery()
+    posts = Post.query.with_entities(Post).join(sub_query, Post.id==sub_query.c.post_id).all()
     return posts
 
 
@@ -57,8 +50,9 @@ def get_posts_num_plc(user):
 
 # mode 1 means profile picture, mode 2 means background
 def save_picture(picture, mode):
-    # can not be sure that all photos will have exclusive names. Simple user_id
-    # should be better. If not, token on the username basis (all names are exclusive)
+    # can not be sure that all photos will have exclusive names.
+    # Simple user_id could be better.
+    # If not, token on the username basis (all names are exclusive)
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(picture.filename)
     picture_fn = random_hex + f_ext

@@ -75,7 +75,6 @@ class UpdateProfileForm(FlaskForm):
     about = TextAreaField('About', validators=[DataRequired()])
     submit = SubmitField('Update')
 
-    # custom validators to check if user with such fields values can be created
     def validate_username(self, username):
         if username.data != current_user.username:
             user = User.query.filter_by(username=username.data).first()

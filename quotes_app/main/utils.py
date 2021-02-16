@@ -91,7 +91,6 @@ def prepare_num_pages(posts, page, per_page):
 
 def is_valid_page(posts, page, per_page):
     len_posts = len(posts)
-    print(len(posts))
     if page <= 0 or per_page <= 0 or (len_posts == 0 and page != 1):
         return False
     if len_posts % per_page == 0:
@@ -112,7 +111,7 @@ def get_best_posts(size):
     return posts
 
 
-# by stars  (last 7 days). By all stars if not enough adages
+# by stars (last 7 days). By all stars if not enough adages
 def get_trending(size):
     time_window = dt.utcnow() - timedelta(days=7)
     sub_query = Like.query.filter(Like.date_like >= time_window)\

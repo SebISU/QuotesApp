@@ -1,0 +1,13 @@
+{% extends "main/layout.html" %}
+{% block content %}
+<div class="col-lg-8 mx-auto">
+    <div class="bg-white shadow rounded overflow-hidden">
+        <div class="container d-flex justify-content-center no-about px-5">
+            <img src="{{ url_for('static', filename='icons_photos/bulb.png') }}" class="img-fluid">
+        </div>
+        <div class="container d-flex justify-content-center text-center no-about mb-5">
+            <h2 class="not-found-color"><b>We work on this. Available soon</b></h2>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,7 +1,6 @@
-{% extends "layout.html" %}
+{% extends "main/layout.html" %}
 {% block content %}
 <div class="col-lg-8 mx-auto">
-    <!-- Profile widget -->
     <div class="bg-white shadow rounded overflow-hidden">
         <div class="px-4 pt-0 pb-4 cover" style="background-image: url('{{ background_image }}')">
             <div class="media align-items-end profile-head">
@@ -32,8 +31,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <form method="POST" action="" enctype="multipart/form-data"> <!-- enctype added in order to pass an image data properly -->
-                            {{ form.hidden_tag() }} <!-- sets a csrf token (secret key) -->
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
                             <fieldset class="form-group">
                                 <div class="p-4 rounded shadow bg-light">
                                     <div class="form-group">

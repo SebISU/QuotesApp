@@ -7,15 +7,16 @@ body {
     display: flex;
     flex-direction: column;
     background: #f0fafa;
+    /* first: #f0fafa
+        second: #ebffff
+        third: #eafafa*/
     color: #333333;
     margin-top: 6rem;
-    background-image: url('village_road.jpg');
+    /*background-image: url('../icons_photos/4.jpg');*/
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
 }
-/* to set plain background remove last 4 lines */
-
 
 .content {
     flex: 1 0 auto;
@@ -42,6 +43,22 @@ a, a:active, a:focus, button, button:active, button:focus {
 
 .name-city-shadow {
     text-shadow: 2px 0 0 black;
+}
+
+.no-matching {
+    margin-top: 7rem !important;
+}
+
+.no-about {
+    margin-top: 3rem !important;
+}
+
+.no-matching-color {
+    color: #cccccc;
+}
+
+.not-found-color {
+    color: #565656;
 }
 
 .bg-violet {
@@ -188,12 +205,20 @@ a, a:active, a:focus, button, button:active, button:focus {
     border-color: #451e3e;
 }
 
-/* for post item */
 .card-footer:last-child {
     border-radius: 15px;
 }
 
-/* for login template */
+.search-field {
+    height: 38px;
+    width: 36px;
+    background-image: url('../icons_photos/search.png');
+}
+
+.search-field input {
+    opacity: 0;
+    height: 38px;
+}
 
 .card {
 background: #451e3e;
@@ -213,6 +238,10 @@ margin-bottom: 20px;
 
 .card-header h3{
 color: #ffffff;
+}
+
+.card-location {
+    height: 70vh;
 }
 
 input:focus{
@@ -299,8 +328,6 @@ margin-left: 4px;
     box-shadow: none;
 }
 
-/* for user_profile page*/
-
 .profile-head {
     transform: translateY(5rem)
 }
@@ -309,8 +336,6 @@ margin-left: 4px;
     background-size: cover;
     background-repeat: no-repeat;
 }
-
-/* for posts list */
 
 .vl {
     margin: 0px !important;
@@ -332,8 +357,6 @@ margin-left: 4px;
 .list-inline-item:not(:last-child) {
     margin-right: 0px;
 }
-
-/* button add a file */
 
 .upload-btn-wrapper {
     position: relative;

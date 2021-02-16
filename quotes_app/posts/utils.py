@@ -35,7 +35,8 @@ def prepare_comments_display(comments, size):
             comment_info.append(User.query.get(like.user_id))
         comment_info.append(comment)
         starred = None
-        starred = LikeComment.query.filter_by(comment=comment, like_comment_author=current_user).first()
+        starred = LikeComment.query.filter_by(comment=comment,
+            like_comment_author=current_user).first()
         if starred:
             comment_info.append(True)
         else:
@@ -44,7 +45,8 @@ def prepare_comments_display(comments, size):
     return comments_data
 
 def update_like_comment_table(user, comment_id):
-    like = LikeComment.query.filter_by(like_comment_author=user, comment_id=comment_id).first()
+    like = LikeComment.query.filter_by(like_comment_author=user,
+        comment_id=comment_id).first()
     if like:
         db.session.delete(like)
     else:
@@ -53,26 +55,26 @@ def update_like_comment_table(user, comment_id):
     db.session.commit()
 
 def get_best_comments_post(post, size):
-    comments  = Comment.query.filter_by(comment_post=post).all()
-    num_likes_list = []
-    for comment in comments:
-        num_likes = len(LikeComment.query.filter_by(comment=comment).all())
-        num_likes_list.append([comment, num_likes])
-    num_likes_list.sort(key=lambda x: x[1], reverse=True)
-    return [x[0] for x in num_likes_list[:size]]
+    sub_query = LikeComment.query.with_entities(LikeComment.comment_id,
+    func.count(LikeComment.id).label('sum_likes')).group_by(LikeComment.comment_id)\
+    .order_by(func.count(LikeComment.id).desc()).limit(size).subquery()
+    comments = Comment.query.with_entities(Comment).join(sub_query,
+    Comment.id==sub_query.c.comment_id).all()
+    return comments
 
 def get_stats_post(post):
     """Returns a list of post stats
     return format ->  global rank, num_of_likes, num_of_comments
     """
-    posts = Like.query.with_entities(Like.post_id, func.count(Like.user_id))\
-        .group_by(Like.post_id).order_by(func.count(Like.user_id).desc()).all()
-    glob_rank = len(posts) + 1
-    num_likes = 0
+    sub_query = Like.query.with_entities(Like.post_id,
+        func.count(Like.user_id).label('sum_likes')).group_by(Like.post_id).subquery()
+    posts = Post.query.with_entities(Post, sub_query.c.sum_likes).join(sub_query,
+        Post.id==sub_query.c.post_id,isouter=True).order_by(sub_query.c.sum_likes.desc(),
+        Post.date_posted.desc()).all()
     for x in range(len(posts)):
-        if posts[x][0] == post.id:
+        if posts[x].Post.id == post.id:
             glob_rank = x + 1
-            num_likes = posts[x][1]
+            num_likes = posts[x].sum_likes if posts[x].sum_likes else 0
             break
     num_comments = len(Comment.query.filter_by(comment_post=post).all())
     return glob_rank, num_likes, num_comments

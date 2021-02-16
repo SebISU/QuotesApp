@@ -1,7 +1,6 @@
-{% extends "layout.html" %}
+{% extends "main/layout.html" %}
 {% block content %}
 <div class="col-md-8">
-    <!-- posts -->
     <div class="mx-auto">
         <div class="container py-4 px-4 mb-4 bg-white shadow rounded overflow-hidden">
             <div class="card rounded card-nf bg-white p-0">
@@ -10,7 +9,7 @@
                         <div class="ml-1 mr-auto">
                             <div class="dropdown">
                                 <button class="btn btn-filter btn-order p-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ url_for('static', filename='filter.png') }}" width="40" height="40">
+                                    <img src="{{ url_for('static', filename='icons_photos/filter.png') }}" width="40" height="40">
                                 </button>
                                 <div class="dropdown-menu m-0" aria-labelledby="dropdownMenuButton">
                                     {% if search %}
@@ -52,7 +51,7 @@
                         <div class="row">
                             <div class="col-md-auto ">
                                 <a href="{{ url_for('posts.post', post_id=post[-2].id) }}" class="btn btn-outlined btn-black text-muted bg-transparent p-1 ml-1 mr-2" data-wow-delay="0.7s">
-                                    <img src="{{ url_for('static', filename='comment.png') }}" class="mr-1 " width="19" height="19">
+                                    <img src="{{ url_for('static', filename='icons_photos/comment.png') }}" class="mr-1 " width="19" height="19">
                                     <small>COMMENT</small>
                                 </a>
                                 <span class="vl mr-2 ml-0"></span>
@@ -62,9 +61,9 @@
                                     <a href="{{ url_for('main.home', page=page, star=post[-2].id, srt=sort) }}" class="btn btn-outlined btn-black text-muted bg-transparent p-1 ml-2 mr-0" data-wow-delay="0.7s">
                                 {% endif %}
                                 {% if post[-1] == True %}
-                                    <img src="{{ url_for('static', filename='christmas-star.png') }}" width="19" height="19">
+                                    <img src="{{ url_for('static', filename='icons_photos/christmas-star.png') }}" width="19" height="19">
                                 {% else %}
-                                    <img src="{{ url_for('static', filename='star.png') }}" width="19" height="19">
+                                    <img src="{{ url_for('static', filename='icons_photos/star.png') }}" width="19" height="19">
                                 {% endif %}
                                 </a>
                                 <small>STARS</small>
@@ -104,9 +103,16 @@
                         ...
                     {% endif %}
                 {% endfor %}
-            </div> 
+            </div>
+            {% if not posts_data %}
+                <div class="container d-flex justify-content-center no-matching">
+                    <img src="{{ url_for('static', filename='icons_photos/no_results.png') }}" class="img-fluid">
+                </div>
+                <div class="container d-flex justify-content-center text-center no-matching mb-5">
+                    <h2 class="no-matching-color"><b>No matching results. Try later</b></h2>
+                </div>
+            {% endif %}
         </div>
-    <!-- posts -->
     </div>
 </div>
 <div class="col-md-4">

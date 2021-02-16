@@ -3,5 +3,5 @@ from wtforms import StringField, SubmitField
 
 
 class SearchForm(FlaskForm):
-    content = StringField('Search')
-    submit = SubmitField('Go')
+    query = StringField('Search')
+    schsubmit = SubmitField('Go')

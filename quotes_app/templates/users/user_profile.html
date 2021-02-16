@@ -1,8 +1,7 @@
-{% extends "layout.html" %}
+{% extends "main/layout.html" %}
 {% block content %}
 <div class="col-md-8">
     <div class="mx-auto">
-        <!-- Profile widget -->
         <div class="bg-white mb-4 shadow rounded overflow-hidden">
             <div class="px-4 pt-0 pb-4 cover" style="background-image: url('{{ background_image }}')">
                 <div class="media align-items-end profile-head">
@@ -41,7 +40,6 @@
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <h5 class="mb-0">Posts</h5>
                 </div>
-                <!-- posts -->
                 <div class="container">
                     {% for post in posts_data %}
                         <div class="card rounded shadow bg-light py-2 mb-5">
@@ -64,15 +62,15 @@
                                 <div class="row">
                                     <div class="col-md-auto pr-1">
                                         <a href="{{ url_for('posts.post', post_id=post[-2].id) }}" class="btn btn-outlined btn-black text-muted bg-transparent p-1 ml-1 mr-2" data-wow-delay="0.7s">
-                                            <img src="{{ url_for('static', filename='comment.png') }}" class="mr-1 " width="19" height="19">
+                                            <img src="{{ url_for('static', filename='icons_photos/comment.png') }}" class="mr-1 " width="19" height="19">
                                             <small>COMMENT</small>
                                         </a>
                                         <span class="vl mr-2 ml-0"></span>
                                         <a href="{{ url_for('users.user_profile', username=user.username, page=posts.page, star=post[-2].id) }}" class="btn btn-outlined btn-black text-muted bg-transparent p-1 ml-2 mr-0" data-wow-delay="0.7s">
                                             {% if post[-1] == True %}
-                                                <img src="{{ url_for('static', filename='christmas-star.png') }}" width="19" height="19">
+                                                <img src="{{ url_for('static', filename='icons_photos/christmas-star.png') }}" width="19" height="19">
                                             {% else %}
-                                                <img src="{{ url_for('static', filename='star.png') }}" width="19" height="19">
+                                                <img src="{{ url_for('static', filename='icons_photos/star.png') }}" width="19" height="19">
                                             {% endif %}
                                         </a>
                                         <small>STARS</small>
@@ -106,12 +104,10 @@
                         {% endfor %}
                     </div>
                 </div>
-                <!-- posts -->
             </div>
         </div>
     </div>
 </div>
-<!-- sidebar -->
 <div class="col-md-4">
     <div class="content-section shadow">
         <div class="mb-3 text-center">
