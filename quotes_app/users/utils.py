@@ -52,7 +52,7 @@ def get_posts_num_plc(user):
 def save_picture(picture, mode):
     # can not be sure that all photos will have exclusive names.
     # Simple user_id could be better.
-    # If not, token on the username basis (all names are exclusive)
+    # If not, token based on the username (all names are exclusive)
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(picture.filename)
     picture_fn = random_hex + f_ext
